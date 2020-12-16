@@ -1,12 +1,12 @@
 {
-    "id": "C1C6BABB",
+    "id": "8AE9BE11",
     "path": "F:/practice_r/#31_Dashboard/flexdashboard_bike-share/index.rmd",
     "project_path": "index.rmd",
     "type": "r_markdown",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1608084890579.0,
+    "created": 1608085192945.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
@@ -19,7 +19,7 @@
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1608084909887,
+    "last_content_update": 1608084910,
     "read_only": false,
     "read_only_alternatives": []
 }
