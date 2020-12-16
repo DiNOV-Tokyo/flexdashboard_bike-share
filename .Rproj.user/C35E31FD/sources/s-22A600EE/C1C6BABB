@@ -1,25 +1,25 @@
 {
-    "id": "8F7B8D76",
+    "id": "C1C6BABB",
     "path": "F:/practice_r/#31_Dashboard/flexdashboard_bike-share/index.rmd",
     "project_path": "index.rmd",
     "type": "r_markdown",
-    "hash": "405774797",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1608078656942.0,
+    "created": 1608084890579.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
-        "cursorPosition": "1,30",
-        "scrollLine": "0",
+        "cursorPosition": "51,22",
+        "scrollLine": "12",
         "last_setup_crc32": "6291A822c91be994"
     },
     "folds": "",
-    "lastKnownWriteTime": 1608081134,
+    "lastKnownWriteTime": 1608084910,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1608081133571,
+    "last_content_update": 1608084909887,
     "read_only": false,
     "read_only_alternatives": []
 }
