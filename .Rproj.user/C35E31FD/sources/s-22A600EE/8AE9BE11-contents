@@ -1,65 +1,69 @@
 ---
-title: "ggplot2 Diamonds Explorer"
+title: "Share bike in Portland"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    social: menu
-    source_code: embed
-runtime: shiny
+    vertical_layout: fill
 ---
 
-```{r global, include=FALSE}
-# load data in 'global' chunk so it can be shared by all users of the dashboard
-library(ggplot2)
-library(mgcv)
-dataset <- diamonds
+```{r setup, include=FALSE}
+# https://github.com/simonpcouch/gbfs
+library(flexdashboard)
+library(gbfs)
+library(tidyverse)
+library(leaflet)
+
 ```
 
-Inputs {.sidebar}
+Column {data-width=650}
 -----------------------------------------------------------------------
 
+### Map
+
 ```{r}
-sliderInput('sampleSize', 'Sample Size', min=1, max=nrow(dataset),
-            value=min(1000, nrow(dataset)), step=500, round=0)
+library(plotly)
 
-checkboxInput('jitter', 'Jitter', value = TRUE)
-checkboxInput('smooth', 'Smooth', value = TRUE)
+pdx_station_info <- 
+  get_station_information("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
 
-selectInput('x', 'X', names(dataset))
-selectInput('y', 'Y', names(dataset), names(dataset)[[2]])
-selectInput('color', 'Color', c('None', names(dataset)))
+pdx_station_status <- 
+  get_station_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
 
-selectInput('facet_row', 'Facet Row',
-            c(None='.', names(diamonds[sapply(diamonds, is.factor)])))
-selectInput('facet_col', 'Facet Column',
-            c(None='.', names(diamonds[sapply(diamonds, is.factor)])))
+pdx_stations <- full_join(pdx_station_info, 
+                          pdx_station_status, 
+                          by = "station_id") %>%
+  select(id = station_id, 
+         lon, 
+         lat, 
+         num_bikes_available, 
+         num_docks_available) %>%
+  mutate(type = "docked")
+
+pdx_free_bikes <- 
+  get_free_bike_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json", 
+                       output = "return") %>%
+  select(id = bike_id, lon, lat) %>%
+  mutate(num_bikes_available = 1,
+         num_docks_available = NA,
+         type = "free")
+
+pdx_full <- bind_rows(pdx_stations, pdx_free_bikes)
+
+leaflet(pdx_full) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_bikes_available, color="blue", weight=2) %>% 
+  addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_docks_available, color="red", weight=2)
 ```
 
-Outputs
+Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Diamonds
+### Data table
 
 ```{r}
-dataset <- reactive({
-  diamonds[sample(nrow(diamonds), input$sampleSize),]
-})
+library(DT)
 
-renderPlot({
-  p <- ggplot(dataset(), aes_string(x=input$x, y=input$y)) + geom_point()
-  
-  if (input$color != 'None')
-    p <- p + aes_string(color=input$color)
-  
-  facets <- paste(input$facet_row, '~', input$facet_col)
-  if (facets != '. ~ .')
-    p <- p + facet_grid(facets)
-  
-  if (input$jitter)
-    p <- p + geom_jitter()
-  if (input$smooth)
-    p <- p + geom_smooth()
-  
-  print(p)
-})
+datatable(pdx_full)
 ```
+
+

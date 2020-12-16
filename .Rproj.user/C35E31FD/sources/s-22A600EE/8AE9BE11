@@ -3,23 +3,23 @@
     "path": "F:/practice_r/#31_Dashboard/flexdashboard_bike-share/index.rmd",
     "project_path": "index.rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "405774797",
     "contents": "",
     "dirty": false,
     "created": 1608085192945.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
-        "cursorPosition": "16,0",
-        "scrollLine": "0",
+        "cursorPosition": "69,0",
+        "scrollLine": "46",
         "last_setup_crc32": "6291A822c91be994"
     },
     "folds": "",
-    "lastKnownWriteTime": 1608084910,
+    "lastKnownWriteTime": 1608085696,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1608084910,
+    "last_content_update": 1608085695625,
     "read_only": false,
     "read_only_alternatives": []
 }
