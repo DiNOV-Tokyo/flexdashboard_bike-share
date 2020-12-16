@@ -1,0 +1,203 @@
+---
+title: "dashboard_map"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+date: "`r Sys.Date()`"
+runitime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(knitr)
+library(shiny)
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+
+library(plotly)
+library(afrilearndata)
+library(sf)
+library(leaflet)
+library(tmap)
+
+library(rvest)
+library(lwgeom)
+library(rnaturalearth)
+
+library(DT)
+```
+
+Globe
+=====================================   
+
+Row
+-----------------------------------------------------------------------
+
+```{r globe_map}
+
+world <- rnaturalearth::ne_countries(scale = 'small', returnclass = 'sf')
+
+ggplot() +
+  geom_sf(data=world, color="gray80", aes(fill=continent)) +
+  coord_sf( crs= "+proj=ortho +lat_0=-20 +lon_0=-30")
+
+
+```
+
+
+```{r globe_map2}
+
+ggplot() +
+  geom_sf(data=world, color="gray80", aes(fill=continent)) +
+  coord_sf( crs= "+proj=ortho +lat_0=20 +lon_0=90")
+
+
+```
+
+EU map
+=====================================   
+
+
+```{r eu_map}
+
+
+map <- read_sf("shp_euro/Europe.shp") 
+
+map %>%
+  ggplot() +
+  geom_sf(aes(fill = NAME)) + 
+  coord_sf(datum = NA)+
+  theme_bw()+
+  scale_size(range=c(1,10))+
+  theme(legend.key.width=unit(0.2,"cm"),legend.key.height=unit(0.1,"cm"),legend.position = c(0.9, 0.7), legend.text=element_text(size=5))+
+  guides(fill=guide_legend(title="Country name"))
+
+
+```
+
+
+States map
+=====================================   
+
+```{r us_map}
+# https://eric.clst.org/tech/usgeojson/
+states <- geojsonio::geojson_read("gz_2010_us_040_00_20m.json", what = "sp")
+
+leaflet(states) %>%
+  addTiles() %>% 
+  setView(-96, 37.8, 4) %>% 
+  addPolygons()
+
+```
+
+
+States airport map
+=====================================   
+
+```{r us_airport}
+
+airport <- read_html("https://www.latlong.net/category/airports-236-19.html")
+
+airport_table <- airport %>% 
+  html_table %>%
+  `[[`(1) 
+
+leaflet(airport_table) %>% 
+  addTiles() %>% 
+  addMarkers(lng=~Longitude,lat=~Latitude,popup=~`Place Name`,label=paste(airport_table$`Place Name`,"</br>",airport_table$Longitude,airport_table$Latitude,sep=","))
+
+```
+
+Asia map
+=====================================   
+
+Row
+-----------------------------------------------------------------------
+
+### Raw Data
+
+```{r asia_data}
+
+asia <- rnaturalearth::ne_countries(
+  continent = "Asia",
+  returnclass = "sf"
+)
+
+asia_dat <- asia %>%
+  mutate( 
+    centroid = st_centroid(geometry),
+    x = st_coordinates(centroid)[, 1],
+    y = st_coordinates(centroid)[, 2]
+  ) %>%
+  arrange(desc(pop_est)) %>% 
+  select(sovereignt, admin, adm0_a3, name, formal_en, pop_est, gdp_md_est, subregion, x, y, geometry, centroid)
+
+datatable(asia_dat)
+
+```
+
+### Map
+
+```{r asia_map}
+
+asia_dat %>%
+  ggplot() +
+  geom_sf(aes(fill = pop_est)) +
+  coord_sf(datum = NA) +
+  scale_fill_viridis_c(alpha = 0.6) +
+  theme_void()+ 
+  geom_text_repel(aes(x = x, y = y, label = name), col="skyblue", size = 4)
+
+
+```
+
+ Africa
+=====================================   
+
+
+Row
+-----------------------------------------------------------------------
+
+### Countries / Capital / Highway 
+
+```{r map_all}
+
+tm_shape(afripop2020) +
+  tm_raster(palette = rev(viridisLite::magma(5)), breaks=c(0,2,20,200,2000,25000)) +
+  tm_shape(africountries) +
+  tm_borders("red", lwd = .7) +
+  tm_shape(afrihighway) +
+  tm_lines(col = "green", alpha=0.6) + 
+  tm_shape(africapitals) +
+  tm_symbols(col = "blue", alpha=0.6, scale = .4 )+
+  tm_legend(show = FALSE)
+
+
+```
+
+### Population
+
+```{r map}
+
+dat <- africountries %>%
+  mutate( 
+    centroid = st_centroid(geometry),
+    x = st_coordinates(centroid)[, 1],
+    y = st_coordinates(centroid)[, 2]
+  ) %>%
+  arrange(desc(pop_est))
+
+dat %>%
+  ggplot() +
+  geom_sf(aes(fill = pop_est)) +
+  coord_sf(datum = NA) +
+  scale_fill_viridis_c(alpha = 0.6) +
+  theme_void()+ 
+  geom_text_repel(aes(x = x, y = y, label = name), col="black", size = 3)
+
+#plotly(p_map)
+
+```
+

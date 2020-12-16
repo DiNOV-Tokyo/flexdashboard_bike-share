@@ -1,5 +1,5 @@
 ---
-title: "Graph examples"
+title: "Share bike in Portland"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -7,58 +7,63 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-# https://dinov-tokyo.github.io/flexdashboard_ex/
-# https://ramikrispin.github.io/2020/09/deploying-flexdashboard-on-github-pages/
-# https://plotly.com/r/
+# https://github.com/simonpcouch/gbfs
 library(flexdashboard)
+library(gbfs)
+library(tidyverse)
+library(leaflet)
+
 ```
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### Map
 
 ```{r}
 library(plotly)
 
-Animals <- c("giraffes", "orangutans", "monkeys")
-SF_Zoo <- c(20, 14, 23)
-LA_Zoo <- c(12, 18, 29)
-data <- data.frame(Animals, SF_Zoo, LA_Zoo)
+pdx_station_info <- 
+  get_station_information("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
 
-fig <- plot_ly(data, x = ~Animals, y = ~SF_Zoo, type = 'bar', name = 'SF Zoo')
-fig <- fig %>% add_trace(y = ~LA_Zoo, name = 'LA Zoo')
-fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode = 'group')
+pdx_station_status <- 
+  get_station_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
 
-fig
+pdx_stations <- full_join(pdx_station_info, 
+                          pdx_station_status, 
+                          by = "station_id") %>%
+  select(id = station_id, 
+         lon, 
+         lat, 
+         num_bikes_available, 
+         num_docks_available) %>%
+  mutate(type = "docked")
+
+pdx_free_bikes <- 
+  get_free_bike_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json", 
+                       output = "return") %>%
+  select(id = bike_id, lon, lat) %>%
+  mutate(num_bikes_available = 1,
+         num_docks_available = NA,
+         type = "free")
+
+pdx_full <- bind_rows(pdx_stations, pdx_free_bikes)
+
+leaflet(pdx_full) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_bikes_available, color="blue", weight=2) %>% 
+  addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_docks_available, color="red", weight=2)
 ```
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Data table
 
 ```{r}
-library(plotly)
-library(tidyr)
-library(plyr)
+library(DT)
 
-data <- spread(Orange, Tree, circumference)
-data <- rename(data, c("1" = "Tree1", "2" = "Tree2", "3" = "Tree3", "4" = "Tree4", "5" = "Tree5"))
-
-fig <- plot_ly(data, x = ~age, y = ~Tree1, type = 'scatter', mode = 'lines', name = 'Tree 1')
-fig <- fig %>% add_trace(y = ~Tree2, name = 'Tree 2')
-fig <- fig %>% add_trace(y = ~Tree3, name = 'Tree 3')
-fig <- fig %>% add_trace(y = ~Tree4, name = 'Tree 4')
-fig <- fig %>% add_trace(y = ~Tree5, name = 'Tree 5')
-
-
-fig
+datatable(pdx_full)
 ```
 
-### Chart C
-
-```{r}
-
-```
 
