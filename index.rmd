@@ -52,6 +52,7 @@ fig <- fig %>% add_trace(y = ~Tree3, name = 'Tree 3')
 fig <- fig %>% add_trace(y = ~Tree4, name = 'Tree 4')
 fig <- fig %>% add_trace(y = ~Tree5, name = 'Tree 5')
 
+
 fig
 ```
 
