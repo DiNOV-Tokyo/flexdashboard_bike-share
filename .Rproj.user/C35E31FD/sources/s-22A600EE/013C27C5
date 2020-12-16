@@ -1,0 +1,32 @@
+{
+    "id": "013C27C5",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1608087167266.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "expression": "pdx_station_info",
+        "caption": "pdx_station_info",
+        "totalObservations": 187,
+        "displayedObservations": 187,
+        "variables": 19,
+        "cacheKey": "DEF5F0FF",
+        "object": "pdx_station_info",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=pdx_station_info&cache_key=DEF5F0FF&max_cols=50",
+        "preview": 0
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1608085696,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1608087167266,
+    "read_only": false,
+    "read_only_alternatives": []
+}

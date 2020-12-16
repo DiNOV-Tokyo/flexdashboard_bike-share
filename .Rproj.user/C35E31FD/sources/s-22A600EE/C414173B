@@ -1,0 +1,32 @@
+{
+    "id": "C414173B",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1608087148911.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "expression": "pdx_full",
+        "caption": "pdx_full",
+        "totalObservations": 492,
+        "displayedObservations": 492,
+        "variables": 6,
+        "cacheKey": "2230DCA1",
+        "object": "pdx_full",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=pdx_full&cache_key=2230DCA1&max_cols=50",
+        "preview": 0
+    },
+    "folds": "",
+    "lastKnownWriteTime": 32651599816949876,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1608087148911,
+    "read_only": false,
+    "read_only_alternatives": []
+}
