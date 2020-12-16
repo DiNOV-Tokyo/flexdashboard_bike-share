@@ -1,0 +1,2688 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>Share bike in Portland</title>
+
+<meta property="og:title" content="Share bike in Portland" />
+
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+<link rel="icon" href="data:image/x-icon;" type="image/x-icon">
+
+
+<script type="text/javascript">
+window.FlexDashboardComponents = [];
+</script>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/stickytableheaders-0.1.19/jquery.stickytableheaders.min.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.0.3/leaflet.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.15/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<style type="text/css">
+
+/*
+ Dashboard CSS from Keen IO Dashboards
+ (https://github.com/keen/dashboards)
+*/
+
+body {
+  background: #f2f2f2;
+  padding: 60px 0 0 8px; /* padding-top overridden by theme */
+}
+
+body hr {
+  border-color: #d7d7d7;
+  margin: 10px 0;
+}
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar .navbar-brand {
+  text-decoration: none;
+}
+
+.navbar-logo {
+  margin-top: 1px;
+}
+
+.navbar-logo img {
+  margin-right: 12px;
+}
+
+.navbar-author {
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.navbar .dropdown-menu .fa {
+  min-width: 20px;
+}
+
+.navbar .dropdown-menu {
+  min-width: 150px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.chart-wrapper,
+.nav-tabs-custom,
+.sbframe-commentary
+{
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.chart-title {
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 7px 10px 4px;
+}
+
+.chart-wrapper .chart-title:empty {
+  display: none;
+}
+
+.chart-wrapper .chart-stage {
+  overflow: hidden;
+  padding: 5px 10px;
+  position: relative;
+}
+
+.chart-wrapper .chart-notes {
+  background: #fbfbfb;
+  border-top: 1px solid #e2e2e2;
+  color: #808080;
+  font-size: 12px;
+  padding: 8px 10px 5px;
+}
+
+/*
+ CSS for handling flexbox layout
+*/
+
+#dashboard-container {
+  visibility: hidden;
+}
+
+.tab-content>.dashboard-page-wrapper.active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.dashboard-page-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-row-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.dashboard-column-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-column {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-wrapper-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-stage-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  position: relative;
+}
+
+.chart-shim {
+  position: absolute;
+  left: 8px; top: 8px; right: 8px; bottom: 8px;
+}
+
+.no-padding .chart-shim {
+  left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.flowing-content-shim {
+  overflow: auto;
+  left: 0; top: 0; right: 0; bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.flowing-content-container {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.chart-stage .table-bordered {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > th,
+.chart-stage .table-bordered > tfoot > tr > th,
+.chart-stage .table-bordered > tbody > tr > td,
+.chart-stage .table-bordered > tfoot > tr > td {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > td {
+  border-top: 1px solid #dddddd;
+}
+
+.chart-stage .table-bordered > thead > tr > th {
+  border: none;
+  border-bottom: 2px solid #dddddd;
+}
+
+.bootstrap-table table>thead {
+  background-color: #fff;
+}
+
+.bootstrap-table table.data,
+.bootstrap-table table.shiny-table {
+  width: inherit !important;
+}
+
+.bootstrap-table table.data>tbody>tr>th,
+.bootstrap-table table.shiny-table>tbody>tr>th {
+  border-top: none;
+  border-bottom: 2px solid #dddddd;
+  padding: 5px;
+}
+
+.bootstrap-table .data td[align=right] {
+  font-family: inherit;
+}
+
+.chart-wrapper form {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.shiny-input-container label {
+  font-weight: normal;
+}
+
+.chart-stage .html-widget {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .html-widget-static-bound {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .shiny-bound-output {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Omit display of empty paragraphs */
+
+.chart-shim>p:empty {
+  display: none;
+}
+
+.chart-stage>p:empty {
+  display: none;
+}
+
+/* Omit display of special knitr options div*/
+
+.chart-stage .knitr-options {
+  display: none;
+}
+
+/* Automatically resizing images */
+
+.image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.image-container img {
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Value box */
+
+.value-box {
+  border-radius: 2px;
+  position: relative;
+  display: block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.value-box > .inner {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.value-box .value {
+  font-size: 38px;
+  font-weight: bold;
+  margin: 0 0 3px 0;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.value-box .caption {
+  font-size: 15px;
+}
+.value-box .caption > small {
+  display: block;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.value-box .icon i {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 80px;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.linked-value:hover {
+  cursor: pointer;
+}
+
+.value-box.linked-value:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* STORYBOARD */
+
+.storyboard-nav button {
+  background: transparent;
+  border: 0;
+  opacity: .3;
+  outline: none;
+  padding: 0;
+}
+
+.storyboard-nav button:hover,
+.storyboard-nav button:hover {
+  opacity: .5;
+}
+
+.storyboard-nav button:disabled,
+.storyboard-nav button:disabled {
+  opacity: .1;
+}
+
+.storyboard-nav .sbnext,
+.storyboard-nav .sbprev {
+  float: left;
+  width: 2%;
+  height: 120px;
+  font-size: 50px;
+}
+
+.storyboard-nav .sbprev {
+  text-align: left;
+  width: 2%;
+}
+
+.storyboard-nav .sbnext {
+  float: right;
+  text-align: right;
+  margin-right: 8px;
+}
+
+.storyboard-nav .sbframelist {
+  margin: 0 auto;
+  width: 94%;
+  height: 120px;
+  overflow: hidden;
+  text-shadow: none;
+  margin-bottom: 8px;
+}
+
+.storyboard-nav .sbframelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.storyboard-nav .sbframelist ul li {
+  float: left;
+  width: 270px;
+  height: 100%;
+  padding: 10px 10px 10px 10px;
+  margin-right: 8px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  color: #3a3c47;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.storyboard-nav .sbframelist ul li:last-child {
+  margin-right: 0px;
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  color: #fff;
+  background: #B8B8B8;
+}
+
+.sbframe-commentary {
+  width: 300px;
+  background: #fbfbfb;
+  font-size: 14px;
+}
+
+.sbframe-commentary ul {
+  padding-left: 22px;
+}
+
+.sbframe.active {
+  display: flex;
+}
+
+.sbframe:not(.active) {
+  display: none;
+}
+
+/* NAV TABS */
+
+.nav-tabs-custom > .nav-tabs {
+  margin: 0;
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.nav-tabs-custom > .nav-tabs > li {
+  border-top: 3px solid transparent;
+  margin-bottom: -1px;
+  margin-right: 5px;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  color: #666;
+  font-weight: 300;
+  font-size: 14px;
+  border-radius: 0;
+  padding: 3px 10px 5px;
+  text-transform: none;
+}
+
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a {
+  border-bottom-color: transparent;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a.text-muted {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  background: transparent;
+  margin: 0;
+}
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:hover,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:focus,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:active {
+  border-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: #3c8dbc;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
+  background-color: #fff;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-top-color: transparent;
+  border-left-color: #d7d7d7;
+  border-right-color: #d7d7d7;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type {
+  margin-left: 0;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type.active > a {
+  border-left-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs.pull-right {
+  float: none !important;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li {
+  float: right;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type {
+  margin-right: 0;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type > a {
+  border-left-width: 1px;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type.active > a {
+  border-left-color: #d7d7d7;
+  border-right-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.header {
+  line-height: 35px;
+  padding: 0 10px;
+  font-size: 20px;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.header > .fa,
+.nav-tabs-custom > .nav-tabs > li.header > .glyphicon,
+.nav-tabs-custom > .nav-tabs > li.header > .ion {
+  margin-right: 5px;
+}
+.nav-tabs-custom > .tab-content {
+  background: #fff;
+  padding: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom > .tab-content > .chart-wrapper {
+  background: #fff;
+  border: none;
+  margin: 0;
+}
+
+
+.nav-tabs-custom > .tab-content > .active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom .dropdown.open > a:active,
+.nav-tabs-custom .dropdown.open > a:focus {
+  background: transparent;
+  color: #999;
+}
+
+
+@media (max-width: 767px) {
+  .value-box {
+    text-align: center;
+    margin-right: 8px;
+  }
+  .value-box .icon {
+    display: none;
+  }
+}
+
+/* Fixed position sidebar */
+
+.section.sidebar {
+  position: fixed;
+  top: 51px; /* overridden by theme */
+  left: 0;
+  bottom: 0;
+  border-right: 1px solid #e2e2e2;
+  background-color: white; /* overridden by theme */
+  padding-left: 10px;
+  padding-right: 10px;
+  visibility: hidden;
+  overflow: auto;
+}
+
+.section.sidebar form p:first-child {
+  margin-top: 10px;
+}
+
+/* Embedded source code */
+
+#flexdashboard-source-code {
+  display: none;
+}
+
+.featherlight-content #flexdashboard-source-code {
+  display: inline-block;
+}
+
+.featherlight-content {
+  width: 80%;
+  max-width: 800px;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.featherlight:last-of-type {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.featherlight-inner {
+  width: 100%;
+}
+
+.featherlight-content pre {
+  margin: 0;
+  border: 0;
+  background: #fff;
+  font-size: 12px;
+}
+
+.unselectable {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#flexdashboard-source-code code {
+  -ms-user-select: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
+
+/* DataTables Tweaks */
+
+.dataTables_filter input[type="search"] {
+  -webkit-appearance: searchfield;
+  outline: none;
+}
+
+.dataTables_wrapper.no-footer
+.dataTables_info {
+  padding-top: 0;
+}
+
+
+table.dataTable thead th {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+/* Mobile phone only CSS */
+
+.desktop-layout div.section.mobile {
+  display: none;
+}
+
+.mobile-layout div.section.no-mobile {
+  display: none;
+}
+
+.mobile-figure {
+  display: none;
+}
+
+
+
+body {
+  padding-top: 60px;
+}
+
+.section.sidebar {
+  top: 51px;
+  background-color: rgba(39, 128, 227, 0.1);
+}
+
+.value-box {
+  color: #f9f9f9;
+}
+
+.bg-primary {
+  background-color: rgba(39, 128, 227, 0.7);
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  background-color: rgba(39, 128, 227, 0.7);
+}
+
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: rgba(39, 128, 227, 0.7);
+}
+
+.bg-info {
+  background-color: rgba(153, 84, 187, 0.7);
+}
+
+.bg-warning {
+  background-color: rgba(255, 117, 24, 0.7);
+}
+
+.bg-danger {
+  background-color: rgba(255, 0, 57, 0.7);
+}
+
+.bg-success {
+  background-color: rgba(63, 182, 24, 0.7);
+}
+
+.chart-title {
+  font-weight: 500;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  font-weight: 500;
+}
+
+@media only screen and (min-width: 768px) {
+html, body {
+  height: 100%;
+}
+
+#dashboard-container {
+  height: 100%;
+}
+}
+</style>
+
+
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+
+<button id="navbar-button" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+
+<span class="navbar-logo pull-left">
+  
+</span>
+<span class="navbar-brand">
+  Share bike in Portland
+  <span class="navbar-author">
+        </span>
+</span>
+
+</div>
+<div id="navbar" class="navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-left">
+</ul>
+<ul class="nav navbar-nav navbar-right">
+</ul>
+</div><!--/.nav-collapse-->
+</div><!--/.container-->
+</div><!--/.navbar-->
+
+<script type="text/javascript">
+
+
+var FlexDashboard = (function () {
+
+  // initialize options
+  var _options = {};
+
+  var FlexDashboard = function() {
+
+    // default options
+    _options = $.extend(_options, {
+      theme: "cosmo",
+      fillPage: false,
+      orientation: 'columns',
+      storyboard: false,
+      defaultFigWidth: 576,
+      defaultFigHeight: 461,
+      defaultFigWidthMobile: 360,
+      defaultFigHeightMobile: 461,
+      isMobile: false,
+      isPortrait: false,
+      resize_reload: true
+    });
+  };
+
+  function init(options) {
+
+    // extend default options
+    $.extend(true, _options, options);
+
+    // add ids to sections that don't have them (pandoc won't assign ids
+    // to e.g. sections with titles consisting of only chinese characters)
+    var nextId = 1;
+    $('.level1:not([id]),.level2:not([id]),.level3:not([id])').each(function() {
+      $(this).attr('id', 'dashboard-' + nextId++);
+    });
+
+    // find navbar items
+    var navbarItems = $('#flexdashboard-navbar');
+    if (navbarItems.length)
+      navbarItems = JSON.parse(navbarItems.html());
+    addNavbarItems(navbarItems);
+
+    // find the main dashboard container
+    var dashboardContainer = $('#dashboard-container');
+
+    // resolve mobile classes
+    resolveMobileClasses(dashboardContainer);
+
+    // one time global initialization for components
+    componentsInit(dashboardContainer);
+
+    // look for a global sidebar
+    var globalSidebar = dashboardContainer.find(".section.level1.sidebar");
+    if (globalSidebar.length > 0) {
+
+      // global layout for fullscreen displays
+      if (!isMobilePhone()) {
+
+         // hoist it up to the top level
+         globalSidebar.insertBefore(dashboardContainer);
+
+         // lay it out (set width/positions)
+         layoutSidebar(globalSidebar, dashboardContainer);
+
+      // tuck sidebar into first page for mobile phones
+      } else {
+
+        // convert it into a level3 section
+        globalSidebar.removeClass('sidebar');
+        globalSidebar.removeClass('level1');
+        globalSidebar.addClass('level3');
+        var h1 = globalSidebar.children('h1');
+        var h3 = $('<h3></h3>');
+        h3.append(h1.contents());
+        h3.insertBefore(h1);
+        h1.detach();
+
+        // move it into the first page
+        var page = dashboardContainer.find('.section.level1').first();
+        if (page.length > 0)
+          page.prepend(globalSidebar);
+      }
+    }
+
+    // look for pages to layout
+    var pages = $('div.section.level1');
+    if (pages.length > 0) {
+
+        // find the navbar and collapse on clicked
+        var navbar = $('#navbar');
+        navbar.on("click", "a[data-toggle!=dropdown]", null, function () {
+           navbar.collapse('hide');
+        });
+
+        // envelop the dashboard container in a tab content div
+        dashboardContainer.wrapInner('<div class="tab-content"></div>');
+
+        pages.each(function(index) {
+
+          // lay it out
+          layoutDashboardPage($(this));
+
+          // add it to the navbar
+          addToNavbar($(this), index === 0);
+
+        });
+
+    } else {
+
+      // remove the navbar and navbar button if we don't
+      // have any navbuttons
+      if (navbarItems.length === 0) {
+        $('#navbar').remove();
+        $('#navbar-button').remove();
+      }
+
+      // add the storyboard class if requested
+      if (_options.storyboard)
+        dashboardContainer.addClass('storyboard');
+
+      // layout the entire page
+      layoutDashboardPage(dashboardContainer);
+    }
+
+    // if we are in shiny we need to trigger a window resize event to
+    // force correct layout of shiny-bound-output elements
+    if (isShinyDoc())
+      $(window).trigger('resize');
+
+    // make main components visible
+    $('.section.sidebar').css('visibility', 'visible');
+    dashboardContainer.css('visibility', 'visible');
+
+    // handle location hash
+    handleLocationHash();
+
+    // intialize prism highlighting
+    initPrismHighlighting();
+
+    // record mobile and orientation state then register a handler
+    // to refresh if resize_reload is set to true and it changes
+    _options.isMobile = isMobilePhone();
+    _options.isPortrait = isPortrait();
+    if (_options.resize_reload) {
+      $(window).on('resize', function() {
+        if (_options.isMobile !== isMobilePhone() ||
+            _options.isPortrait !== isPortrait()) {
+          window.location.reload();
+        }
+      });
+    } else {
+      // if in desktop mode and resizing to mobile, make sure the heights are 100%
+      // This enforces what `fillpage.css` does for "wider" pages.
+      // Since we are not reloading once the page becomes small, we need to force the height to 100%
+      // This is a new situation introduced when `_options.resize_reload` is `false`
+      if (! _options.isMobile) {
+        // only add if `fillpage.css` was added in the first place
+        if (_options.fillPage) {
+          // fillpage.css
+          $("html,body,#dashboard").css("height", "100%");
+        }
+      }
+    }
+    // trigger layoutcomplete event
+    dashboardContainer.trigger('flexdashboard:layoutcomplete');
+  }
+
+  function resolveMobileClasses(dashboardContainer) {
+     // add top level layout class
+    dashboardContainer.addClass(isMobilePhone() ? 'mobile-layout' :
+                                                  'desktop-layout');
+
+    // look for .mobile sections and add .no-mobile to their peers
+    var mobileSections = $('.section.mobile');
+    mobileSections.each(function() {
+       var id = $(this).attr('id');
+       var nomobileId = id.replace(/-\d+$/, '');
+       $('#' + nomobileId).addClass('no-mobile');
+    });
+  }
+
+  function addNavbarItems(navbarItems) {
+
+    var navbarLeft = $('ul.navbar-left');
+    var navbarRight = $('ul.navbar-right');
+
+    for (var i = 0; i<navbarItems.length; i++) {
+
+      // get the item
+      var item = navbarItems[i];
+
+      // determine the container
+      var container = null;
+      if (item.align === "left")
+        container = navbarLeft;
+      else
+        container = navbarRight;
+
+      // navbar menu if we have multiple items
+      if (item.items) {
+        var menu = navbarMenu(null, item.icon, item.title, container);
+        for (var j = 0; j<item.items.length; j++) {
+          var subItem = item.items[j];
+          var li = $('<li></li>');
+          li.append(navbarLink(subItem.icon, subItem.title, subItem.href, subItem.target));
+          menu.append(li);
+        }
+      } else {
+        var li = $('<li></li>');
+        li.append(navbarLink(item.icon, item.title, item.href, item.target));
+        container.append(li);
+      }
+    }
+  }
+
+  // create or get a reference to an existing dropdown menu
+  function navbarMenu(id, icon, title, container) {
+    var existingMenu = [];
+    if (id)
+      existingMenu = container.children('#' + id);
+    if (existingMenu.length > 0) {
+      return existingMenu.children('ul');
+    } else {
+      var li = $('<li></li>');
+      if (id)
+        li.attr('id', id);
+      li.addClass('dropdown');
+      // auto add "Share" title on mobile if necessary
+      if (!title && icon && (icon === "fa-share-alt") && isMobilePhone())
+        title = "Share";
+      if (title) {
+        title = title + ' <span class="caret"></span>';
+      }
+      var a = navbarLink(icon, title, "#");
+      a.addClass('dropdown-toggle');
+      a.attr('data-toggle', 'dropdown');
+      a.attr('role', 'button');
+      a.attr('aria-expanded', 'false');
+      li.append(a);
+      var ul = $('<ul class="dropdown-menu"></ul>');
+      ul.attr('role', 'menu');
+      li.append(ul);
+      container.append(li);
+      return ul;
+    }
+  }
+
+  function addToNavbar(page, active) {
+
+    // capture the id and data-icon attribute (if any)
+    var id = page.attr('id');
+    var icon = page.attr('data-icon');
+    var navmenu = page.attr('data-navmenu');
+
+    // get hidden state (transfer this to navbar)
+    var hidden = page.hasClass('hidden');
+    page.removeClass('hidden');
+
+    // sanitize the id for use with bootstrap tabs
+    id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+    page.attr('id', id);
+
+    // get the wrapper
+    var wrapper = page.closest('.dashboard-page-wrapper');
+
+    // move the id to the wrapper
+    page.removeAttr('id');
+    wrapper.attr('id', id);
+
+    // add the tab-pane class to the wrapper
+    wrapper.addClass('tab-pane');
+    if (active)
+      wrapper.addClass('active');
+
+    // get a reference to the h1, discover its inner contens, then detach it
+    var h1 = wrapper.find('h1').first();
+    var title = h1.contents();
+    h1.detach();
+
+    // create a navbar item
+    var li = $('<li></li>');
+    var a = navbarLink(icon, title, '#' + id);
+    a.attr('data-toggle', 'tab');
+    li.append(a);
+
+    // add it to the navbar (or navbar menu if specified)
+    var container = $('ul.navbar-left');
+    if (navmenu) {
+      var menuId = navmenu.replace(/\s+/g, '');
+      var menu = navbarMenu(menuId, null, navmenu, container);
+      menu.append(li);
+    } else {
+      container.append(li);
+    }
+
+    // hide it if requested
+    if (hidden)
+      li.addClass('hidden');
+  }
+
+  function navbarLink(icon, title, href, target) {
+
+    var a = $('<a></a>');
+    if (icon) {
+
+      // get the name of the icon set and icon
+      var dashPos = icon.indexOf("-");
+      var iconSet = null;
+      var iconSplit = icon.split(" ");
+      if (iconSplit.length > 1) {
+        iconSet = iconSplit[0];
+        icon = iconSplit.slice(1).join(" ");
+      } else {
+        iconSet = icon.substring(0, dashPos);
+      }
+      var iconName = icon.substring(dashPos + 1);
+
+      // create the icon
+      var iconElement = $('<span class="' + iconSet + ' ' + icon + '"></span>');
+      if (title)
+        iconElement.css('margin-right', '7px');
+      a.append(iconElement);
+      // if href is null see if we can auto-generate based on icon (e.g. social)
+      if (!href)
+        maybeGenerateLinkFromIcon(iconName, a);
+    }
+    if (title)
+      a.append(title);
+
+    // add the href.
+    if (href) {
+      if (href === "source_embed") {
+        a.attr('href', '#');
+        a.attr('data-featherlight', "#flexdashboard-source-code");
+        a.featherlight({
+            beforeOpen: function(event){
+              $('body').addClass('unselectable');
+            },
+            afterClose: function(event){
+              $('body').removeClass('unselectable');
+            }
+        });
+      } else {
+        a.attr('href', href);
+      }
+    }
+
+    // add the arget
+    if (target)
+      a.attr('target', target);
+
+    return a;
+  }
+
+  // auto generate a link from an icon name (e.g. twitter) when possible
+  function maybeGenerateLinkFromIcon(iconName, a) {
+
+     var serviceLinks = {
+      "twitter": "https://twitter.com/share?text=" + encodeURIComponent(document.title) + "&url="+encodeURIComponent(location.href),
+      "facebook": "https://www.facebook.com/sharer/sharer.php?s=100&p[url]="+encodeURIComponent(location.href),
+      "google-plus": "https://plus.google.com/share?url="+encodeURIComponent(location.href),
+      "linkedin": "https://www.linkedin.com/shareArticle?mini=true&url="+encodeURIComponent(location.href) + "&title=" + encodeURIComponent(document.title),
+      "pinterest": "https://pinterest.com/pin/create/link/?url="+encodeURIComponent(location.href) + "&description=" + encodeURIComponent(document.title)
+    };
+
+    var makeSocialLink = function(a, href) {
+      a.attr('href', '#');
+      a.on('click', function(e) {
+        e.preventDefault();
+        window.open(href);
+      });
+    };
+
+    $.each(serviceLinks, function(key, value) {
+      if (iconName.indexOf(key) !== -1)
+        makeSocialLink(a, value);
+    });
+  }
+
+  // layout a dashboard page
+  function layoutDashboardPage(page) {
+
+    // use a page wrapper so that free form content above the
+    // dashboard appears at the top rather than the side (as it
+    // would without the wrapper in a column orientation)
+    var wrapper = $('<div class="dashboard-page-wrapper"></div>');
+    page.wrap(wrapper);
+
+    // if there are no level2 or level3 headers synthesize a level3
+    // header to contain the (e.g. frame it, scroll container, etc.)
+    var headers = page.find('h2,h3');
+    if (headers.length === 0)
+      page.wrapInner('<div class="section level3"></div>');
+
+    // hoist up any content before level 2 or level 3 headers
+    var children = page.children();
+    children.each(function(index) {
+      if ($(this).hasClass('level2') || $(this).hasClass('level3'))
+        return false;
+      $(this).insertBefore(page);
+    });
+
+    // determine orientation and fillPage behavior for distinct media
+    var orientation, fillPage, storyboard;
+
+    // media: mobile phone
+    if (isMobilePhone()) {
+
+      // if there is a sidebar we need to ensure it's content
+      // is properly framed as an h3
+      var sidebar = page.find('.section.sidebar');
+      sidebar.removeClass('sidebar');
+      sidebar.wrapInner('<div class="section level3"></div>');
+      var h2 = sidebar.find('h2');
+      var h3 = $('<h3></h3>');
+      h3.append(h2.contents());
+      h3.insertBefore(h2);
+      h2.detach();
+
+      // wipeout h2 elements then enclose them in a single h2
+      var level2 = page.find('div.section.level2');
+      level2.each(function() {
+        level2.children('h2').remove();
+        level2.children().unwrap();
+      });
+      page.wrapInner('<div class="section level2"></div>');
+
+      // substitute mobile images
+      if (isPortrait()) {
+        var mobileFigures = $('img.mobile-figure');
+        mobileFigures.each(function() {
+          // get the src (might be base64 encoded)
+          var src = $(this).attr('src');
+
+          // find it's peer
+          var id = $(this).attr('data-mobile-figure-id');
+          var img = $('img[data-figure-id=' + id + "]");
+          img.attr('src', src)
+             .attr('width', _options.defaultFigWidthMobile)
+             .attr('height', _options.defaultFigHeightMobile);
+        });
+      }
+
+      // hoist storyboard commentary into it's own section
+      if (page.hasClass('storyboard')) {
+        var commentaryHR = page.find('div.section.level3 hr');
+        commentaryHR.each(function() {
+          var commentary = $(this).nextAll().detach();
+          var commentarySection = $('<div class="section level3"></div>');
+          commentarySection.append(commentary);
+          commentarySection.insertAfter($(this).closest('div.section.level3'));
+          $(this).remove();
+        });
+      }
+
+      // force a non full screen layout by columns
+      orientation = _options.orientation = 'columns';
+      fillPage = _options.fillPage = false;
+      storyboard = _options.storyboard = false;
+
+    // media: desktop
+    } else {
+
+      // determine orientation
+      orientation = page.attr('data-orientation');
+      if (orientation !== 'rows' && orientation != 'columns')
+        orientation = _options.orientation;
+
+      // determine storyboard mode
+      storyboard = page.hasClass('storyboard');
+
+      // fillPage based on options (force for storyboard)
+      fillPage = _options.fillPage || storyboard;
+
+      // handle sidebar
+      var sidebar = page.find('.section.level2.sidebar');
+      if (sidebar.length > 0)
+        layoutSidebar(sidebar, page);
+    }
+
+    // give it and it's parent divs height: 100% if we are in fillPage mode
+    if (fillPage) {
+      page.addClass('vertical-layout-fill');
+      page.css('height', '100%');
+      page.parents('div').css('height', '100%');
+    } else {
+      page.addClass('vertical-layout-scroll');
+    }
+
+    // perform the layout
+    if (storyboard)
+      layoutPageAsStoryboard(page);
+    else if (orientation === 'rows')
+      layoutPageByRows(page, fillPage);
+    else if (orientation === 'columns')
+      layoutPageByColumns(page, fillPage);
+  }
+
+  function layoutSidebar(sidebar, content) {
+
+    // get it out of the header hierarchy
+    sidebar = sidebar.first();
+    if (sidebar.hasClass('level1')) {
+      sidebar.removeClass('level1');
+      sidebar.children('h1').remove();
+    } else if (sidebar.hasClass('level2')) {
+      sidebar.removeClass('level2');
+      sidebar.children('h2').remove();
+    }
+
+    // determine width
+    var sidebarWidth = isTablet() ? 220 : 250;
+    var dataWidth = parseInt(sidebar.attr('data-width'));
+    if (dataWidth)
+      sidebarWidth = dataWidth;
+
+    // set the width and shift the page right to accomodate the sidebar
+    sidebar.css('width', sidebarWidth + 'px');
+    content.css('padding-left', sidebarWidth + 'px');
+
+    // wrap it's contents in a form
+    sidebar.wrapInner($('<form></form>'));
+  }
+
+  function layoutPageAsStoryboard(page) {
+
+    // create storyboard navigation
+    var nav = $('<div class="storyboard-nav"></div>');
+
+    // add navigation buttons
+    var prev = $('<button class="sbprev"><i class="fa fa-angle-left"></i></button>');
+    nav.append(prev);
+    var next= $('<button class="sbnext"><i class="fa fa-angle-right"></i></button>');
+    nav.append(next);
+
+    // add navigation frame
+    var frameList = $('<div class="sbframelist"></div>');
+    nav.append(frameList);
+    var ul = $('<ul></ul>');
+    frameList.append(ul);
+
+     // find all the level3 sections (those are the storyboard frames)
+    var frames = page.find('div.section.level3');
+    frames.each(function() {
+
+      // mark it
+      $(this).addClass('sbframe');
+
+      // divide it into chart content and (optional) commentary
+      $(this).addClass('dashboard-column-orientation');
+
+      // stuff the chart into it's own div w/ flex
+      $(this).wrapInner('<div class="sbframe-component"></div>');
+      setFlex($(this), 1);
+      var frame = $(this).children('.sbframe-component');
+
+      // extract the title from the h3
+      var li = $('<li></li>');
+      var h3 = frame.children('h3');
+      li.append(h3.contents());
+      h3.detach();
+      ul.append(li);
+
+      // extract commentary
+      var hr = frame.children('hr');
+      if (hr.length) {
+        var commentary = hr.nextAll().detach();
+        hr.remove();
+        var commentaryFrame = $('<div class="sbframe-commentary"></div>');
+        commentaryFrame.addClass('flowing-content-shim');
+        commentaryFrame.addClass('flowing-content-container');
+        commentaryFrame.append(commentary);
+        $(this).append(commentaryFrame);
+
+        // look for a data-commentary-width attribute
+        var commentaryWidth = $(this).attr('data-commentary-width');
+        if (commentaryWidth)
+          commentaryFrame.css('width', commentaryWidth + 'px');
+      }
+
+      // layout the chart (force flex)
+      var result = layoutChart(frame, true);
+
+      // ice the notes if there are none
+      if (!result.notes)
+        frame.find('.chart-notes').remove();
+
+      // set flex on chart
+      setFlex(frame, 1);
+    });
+
+    // create a div to hold all the frames
+    var frameContent = $('<div class="sbframe-content"></div>');
+    frameContent.addClass('dashboard-row-orientation');
+    frameContent.append(frames.detach());
+
+    // row orientation to stack nav and frame content
+    page.addClass('dashboard-row-orientation');
+    page.append(nav);
+    page.append(frameContent);
+    setFlex(frameContent, 1);
+
+    // initialize sly
+    var sly = new Sly(frameList, {
+    		horizontal: true,
+    		itemNav: 'basic',
+    		smart: true,
+    		activateOn: 'click',
+    		startAt: 0,
+    		scrollBy: 1,
+    		activatePageOn: 'click',
+    		speed: 200,
+    		moveBy: 600,
+    		dragHandle: true,
+    		dynamicHandle: true,
+    		clickBar: true,
+    		keyboardNavBy: 'items',
+    		next: next,
+    		prev: prev
+    	}).init();
+
+    // make first frame active
+    frames.removeClass('active');
+    frames.first().addClass('active');
+
+    // subscribe to frame changed events
+    sly.on('active', function (eventName, itemIndex) {
+      frames.removeClass('active');
+      frames.eq(itemIndex).addClass('active')
+                          .trigger('shown');
+    });
+  }
+
+  function layoutPageByRows(page, fillPage) {
+
+    // row orientation
+    page.addClass('dashboard-row-orientation');
+
+    // find all the level2 sections (those are the rows)
+    var rows = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (rows.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      rows = page.find('div.section.level2');
+    }
+
+    rows.each(function () {
+
+      // flags
+      var haveNotes = false;
+      var haveFlexHeight = true;
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // give it row layout semantics if it's not a tabset
+      if (!isTabset)
+        $(this).addClass('dashboard-row');
+
+      // find all of the level 3 subheads
+      var columns = $(this).find('div.section.level3');
+
+      // determine figureSizes sizes
+      var figureSizes = chartFigureSizes(columns);
+
+      // fixup the columns
+      columns.each(function(index) {
+
+        // layout the chart (force flex if we are in a tabset)
+        var result = layoutChart($(this), isTabset);
+
+        // update flexHeight state
+        if (!result.flex)
+          haveFlexHeight = false;
+
+        // update state
+        if (result.notes)
+          haveNotes = true;
+
+        // set the column flex based on the figure width
+        // (value boxes will just get the default figure width)
+        var chartWidth = figureSizes[index].width;
+        setFlex($(this), chartWidth + ' ' + chartWidth + ' 0px');
+
+      });
+
+      // remove empty chart note divs
+      if (isTabset)
+        $(this).find('.chart-notes').filter(function() {
+            return $(this).html() === "&nbsp;";
+        }).remove();
+      if (!haveNotes)
+        $(this).find('.chart-notes').remove();
+
+       // make it a flexbox row
+      if (haveFlexHeight)
+        $(this).addClass('dashboard-row-flex');
+
+      // now we can set the height on all the wrappers (based on maximum
+      // figure height + room for title and notes, or data-height on the
+      // container if specified). However, don't do this if there is
+      // no flex on any of the constituent columns
+      var flexHeight = null;
+      var dataHeight = parseInt($(this).attr('data-height'));
+      if (dataHeight)
+        flexHeight = adjustedHeight(dataHeight, columns.first());
+      else if (haveFlexHeight)
+        flexHeight = maxChartHeight(figureSizes, columns);
+      if (flexHeight) {
+        if (fillPage)
+          setFlex($(this), flexHeight + ' ' + flexHeight + ' 0px');
+        else {
+          $(this).css('height', flexHeight + 'px');
+          setFlex($(this), '0 0 ' + flexHeight + 'px');
+        }
+      }
+
+    });
+  }
+
+  function layoutPageByColumns(page, fillPage) {
+
+    // column orientation
+    page.addClass('dashboard-column-orientation');
+
+    // find all the level2 sections (those are the columns)
+    var columns = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (columns.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      columns = page.find('div.section.level2');
+    }
+
+    // layout each column
+    columns.each(function (index) {
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // make it a flexbox column
+      $(this).addClass('dashboard-column');
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // find all the h3 elements
+      var rows = $(this).find('div.section.level3');
+
+      // get the figure sizes for the rows
+      var figureSizes = chartFigureSizes(rows);
+
+      // column flex is the max row width (or data-width if specified)
+      var flexWidth;
+      var dataWidth = parseInt($(this).attr('data-width'));
+      if (dataWidth)
+        flexWidth = dataWidth;
+      else
+        flexWidth = maxChartWidth(figureSizes);
+      setFlex($(this), flexWidth + ' ' + flexWidth + ' 0px');
+
+      // layout each chart
+      rows.each(function(index) {
+
+        // perform the layout
+        var result = layoutChart($(this), false);
+
+        // ice the notes if there are none
+        if (!result.notes)
+          $(this).find('.chart-notes').remove();
+
+        // set flex height based on figHeight, then adjust
+        if (result.flex) {
+          var chartHeight = figureSizes[index].height;
+          chartHeight = adjustedHeight(chartHeight, $(this));
+          if (fillPage)
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' 0px');
+          else {
+            $(this).css('height', chartHeight + 'px');
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' ' + chartHeight + 'px');
+          }
+        }
+      });
+    });
+  }
+
+  function chartFigureSizes(charts) {
+
+    // sizes
+    var figureSizes = new Array(charts.length);
+
+    // check each chart
+    charts.each(function(index) {
+
+      // start with default
+      figureSizes[index] = {
+        width: _options.defaultFigWidth,
+        height: _options.defaultFigHeight
+      };
+
+      // look for data-height or data-width then knit options
+      var dataWidth = parseInt($(this).attr('data-width'));
+      var dataHeight = parseInt($(this).attr('data-height'));
+      var knitrOptions = $(this).find('.knitr-options:first');
+      var knitrWidth, knitrHeight;
+      if (knitrOptions) {
+        knitrWidth = parseInt(knitrOptions.attr('data-fig-width'));
+        knitrHeight =  parseInt(knitrOptions.attr('data-fig-height'));
+      }
+
+      // width
+      if (dataWidth)
+        figureSizes[index].width = dataWidth;
+      else if (knitrWidth)
+        figureSizes[index].width = knitrWidth;
+
+      // height
+      if (dataHeight)
+        figureSizes[index].height = dataHeight;
+      else if (knitrHeight)
+        figureSizes[index].height = knitrHeight;
+    });
+
+    // return sizes
+    return figureSizes;
+  }
+
+  function maxChartHeight(figureSizes, charts) {
+
+    // first compute the maximum height
+    var maxHeight = _options.defaultFigHeight;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].height > maxHeight)
+        maxHeight = figureSizes[i].height;
+
+    // now add offests for chart title and chart notes
+    if (charts.length)
+      maxHeight = adjustedHeight(maxHeight, charts.first());
+
+    return maxHeight;
+  }
+
+  function adjustedHeight(height, chart) {
+    if (chart.length > 0) {
+      var chartTitle = chart.find('.chart-title');
+      if (chartTitle.length)
+        height += chartTitle.first().outerHeight();
+      var chartNotes = chart.find('.chart-notes');
+      if (chartNotes.length)
+        height += chartNotes.first().outerHeight();
+    }
+    return height;
+  }
+
+  function maxChartWidth(figureSizes) {
+    var maxWidth = _options.defaultFigWidth;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].width > maxWidth)
+        maxWidth = figureSizes[i].width;
+    return maxWidth;
+  }
+
+  // layout a chart
+  function layoutChart(chart, forceFlex) {
+
+    // state to return
+    var result = {
+      notes: false,
+      flex: false
+    };
+
+    // extract the title
+    var title = extractTitle(chart);
+
+    // find components that apply to this container
+    var components = componentsFind(chart);
+
+    // if it's a custom component then call it and return
+    var customComponents = componentsCustom(components);
+    if (customComponents.length) {
+      componentsLayout(customComponents, title, chart);
+      result.notes = false;
+      result.flex = forceFlex || componentsFlex(customComponents);
+      return result;
+    }
+
+    // put all the content in a chart wrapper div
+    chart.addClass('chart-wrapper');
+    chart.wrapInner('<div class="chart-stage"></div>');
+    var chartContent = chart.children('.chart-stage');
+
+    // flex the content if appropriate
+    result.flex = forceFlex || componentsFlex(components);
+    if (result.flex) {
+      // add flex classes
+      chart.addClass('chart-wrapper-flex');
+      chartContent.addClass('chart-stage-flex');
+
+      // additional shim to break out of flexbox sizing
+      chartContent.wrapInner('<div class="chart-shim"></div>');
+      chartContent = chartContent.children('.chart-shim');
+    }
+
+    // set custom data-padding attribute
+    var pad = chart.attr('data-padding');
+    if (pad) {
+      if (pad === "0")
+        chart.addClass('no-padding');
+      else {
+        pad = pad + 'px';
+        chartContent.css('left', pad)
+                    .css('top', pad)
+                    .css('right', pad)
+                    .css('bottom', pad)
+      }
+    }
+
+    // call compoents
+    componentsLayout(components, title, chartContent);
+
+    // also activate components on shiny output
+    findShinyOutput(chartContent).on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+
+          // see if we opted out of flex based on our output (for shiny
+          // we can't tell what type of output we have until after the
+          // value is bound)
+          var components = componentsFind(element);
+          var flex = forceFlex || componentsFlex(components);
+          if (!flex) {
+            chart.css('height', "");
+            setFlex(chart, "");
+            chart.removeClass('chart-wrapper-flex');
+            chartContent.removeClass('chart-stage-flex');
+            chartContent.children().unwrap();
+          }
+
+          // perform layout
+          componentsLayout(components, title, element.parent());
+        }, 10);
+      });
+
+    // add the title
+    var chartTitle = $('<div class="chart-title"></div>');
+    chartTitle.append(title);
+    chart.prepend(chartTitle);
+
+    // add the notes section
+    var chartNotes = $('<div class="chart-notes"></div>');
+    chartNotes.html('&nbsp;');
+    chart.append(chartNotes);
+
+    // attempt to extract notes if we have a component
+    if (components.length)
+      result.notes = extractChartNotes(chartContent, chartNotes);
+
+    // return result
+    return result;
+  }
+
+  // build a tabset from a section div with the .tabset class
+  function layoutTabset(tabset) {
+
+    // check for fade option
+    var fade = tabset.hasClass("tabset-fade");
+    var navClass = "nav-tabs";
+
+    // determine the heading level of the tabset and tabs
+    var match = tabset.attr('class').match(/level(\d) /);
+    if (match === null)
+      return;
+    var tabsetLevel = Number(match[1]);
+    var tabLevel = tabsetLevel + 1;
+
+    // find all subheadings immediately below
+    var tabs = tabset.find("div.section.level" + tabLevel);
+    if (!tabs.length)
+      return;
+
+    // create tablist and tab-content elements
+    var tabList = $('<ul class="nav ' + navClass + '" role="tablist"></ul>');
+    $(tabs[0]).before(tabList);
+    var tabContent = $('<div class="tab-content"></div>');
+    $(tabs[0]).before(tabContent);
+
+    // build the tabset
+    tabs.each(function(i) {
+
+      // get the tab div
+      var tab = $(tabs[i]);
+
+      // get the id then sanitize it for use with bootstrap tabs
+      var id = tab.attr('id');
+
+      // sanitize the id for use with bootstrap tabs
+      id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+      tab.attr('id', id);
+
+      // get the heading element within it and grab it's text
+      var heading = tab.find('h' + tabLevel + ':first');
+      var headingDom = heading.contents();
+
+      // build and append the tab list item
+      var a = $('<a role="tab" data-toggle="tab"></a>');
+      a.append(headingDom);
+      a.attr('href', '#' + id);
+      a.attr('aria-controls', id);
+      var li = $('<li role="presentation"></li>');
+      li.append(a);
+      if (i === 0)
+        li.attr('class', 'active');
+      tabList.append(li);
+
+      // set it's attributes
+      tab.attr('role', 'tabpanel');
+      tab.addClass('tab-pane');
+      tab.addClass('tabbed-pane');
+      tab.addClass('no-title');
+      if (fade)
+        tab.addClass('fade');
+      if (i === 0) {
+        tab.addClass('active');
+        if (fade)
+          tab.addClass('in');
+      }
+
+      // move it into the tab content div
+      tab.detach().appendTo(tabContent);
+    });
+
+    // add nav-tabs-custom
+    tabset.addClass('nav-tabs-custom');
+
+    // internal layout is dashboard-column with tab-content flexing
+    tabset.addClass('dashboard-column');
+    setFlex(tabContent, 1);
+  }
+
+  // one time global initialization for components
+  function componentsInit(dashboardContainer) {
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.init)
+        component.init(dashboardContainer);
+    }
+  }
+
+  // find components that apply within a container
+  function componentsFind(container) {
+
+    // look for components
+    var components = [];
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.find(container).length)
+        components.push(component);
+    }
+
+    // if there were none then use a special flowing content component
+    // that just adds a scrollbar in fillPage mode
+    if (components.length == 0) {
+      components.push({
+        find: function(container) {
+          return container;
+        },
+
+        flex: function(fillPage) {
+          return fillPage;
+        },
+
+        layout: function(title, container, element, fillPage) {
+          if (fillPage) {
+            container.addClass('flowing-content-shim');
+            container.addClass('flowing-content-container');
+          }
+        }
+      });
+    }
+
+    return components;
+  }
+
+  // if there is a custom component then pick it out
+  function componentsCustom(components) {
+    var customComponent = [];
+    for (var i=0; i<components.length; i++)
+      if (components[i].type === "custom") {
+        customComponent.push(components[i]);
+        break;
+      }
+    return customComponent;
+  }
+
+  // query all components for flex
+  function componentsFlex(components) {
+
+    // no components at all means no flex
+    if (components.length === 0)
+      return false;
+
+    // otherwise query components (assume true unless we see false)
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++)
+      if (components[i].flex && !components[i].flex(_options.fillPage))
+        return false;
+    return true;
+  }
+
+  // layout all components
+  function componentsLayout(components, title, container) {
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++) {
+      var element = components[i].find(container);
+      if (components[i].layout) {
+        // call layout (don't call other components if it returns false)
+        var result = components[i].layout(title, container, element, _options.fillPage);
+        if (result === false)
+          return;
+      }
+    }
+  }
+
+  // get a reference to the h3, discover it's inner html, and remove it
+  function extractTitle(container) {
+    var h3 = container.children('h3').first();
+    var title = '';
+    if (!container.hasClass('no-title'))
+      title = h3.contents();
+    h3.detach();
+    return title;
+  }
+
+  // extract chart notes
+  function extractChartNotes(chartContent, chartNotes) {
+    // look for a terminating blockquote or image caption
+    var blockquote = chartContent.children('blockquote:last-child');
+    var caption = chartContent.children('div.image-container')
+                              .children('p.caption');
+    if (blockquote.length) {
+      chartNotes.empty().append(blockquote.children('p:first-child').contents());
+      blockquote.remove();
+      return true;
+    } else if (caption.length) {
+      chartNotes.empty().append(caption.contents());
+      caption.remove();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function findShinyOutput(chartContent) {
+    return chartContent.find('.shiny-text-output, .shiny-html-output');
+  }
+
+  // safely detect rendering on a mobile phone
+  function isMobilePhone() {
+    try
+    {
+      return ! window.matchMedia("only screen and (min-width: 768px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  function isFillPage() {
+    return _options.fillPage;
+  }
+
+  // detect portrait mode
+  function isPortrait() {
+    return ($(window).width() < $(window).height());
+  }
+
+  // safely detect rendering on a tablet
+  function isTablet() {
+    try
+    {
+      return window.matchMedia("only screen and (min-width: 769px) and (max-width: 992px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  // test whether this is a shiny doc
+  function isShinyDoc() {
+    return (typeof(window.Shiny) !== "undefined" && !!window.Shiny.outputBindings);
+  }
+
+  // set flex using vendor specific prefixes
+  function setFlex(el, flex) {
+    el.css('-webkit-box-flex', flex)
+      .css('-webkit-flex', flex)
+      .css('-ms-flex', flex)
+      .css('flex', flex);
+  }
+
+  // support bookmarking of pages
+  function handleLocationHash() {
+
+    // restore tab/page from bookmark
+    var hash = window.decodeURIComponent(window.location.hash);
+    if (hash.length > 0)
+      $('ul.nav a[href="' + hash + '"]').tab('show');
+    FlexDashboardUtils.manageActiveNavbarMenu();
+
+    // navigate to a tab when the history changes
+    window.addEventListener("popstate", function(e) {
+      var hash = window.decodeURIComponent(window.location.hash);
+      var activeTab = $('ul.nav a[href="' + hash + '"]');
+      if (activeTab.length) {
+        activeTab.tab('show');
+      } else {
+        $('ul.nav a:first').tab('show');
+      }
+      FlexDashboardUtils.manageActiveNavbarMenu();
+    });
+
+    // add a hash to the URL when the user clicks on a tab/page
+    $('.navbar-nav a[data-toggle="tab"]').on('click', function(e) {
+      var baseUrl = FlexDashboardUtils.urlWithoutHash(window.location.href);
+      var hash = FlexDashboardUtils.urlHash($(this).attr('href'));
+      var href = baseUrl + hash;
+      FlexDashboardUtils.setLocation(href);
+    });
+
+    // handle clicks of other links that should activate pages
+    var navPages = $('ul.navbar-nav li a[data-toggle=tab]');
+    navPages.each(function() {
+      var href =  $(this).attr('href');
+      var links = $('a[href="' + href + '"][data-toggle!=tab]');
+      links.each(function() {
+        $(this).on('click', function(e) {
+          window.FlexDashboardUtils.showPage(href);
+        });
+      });
+    });
+  }
+
+  // tweak Prism highlighting
+  function initPrismHighlighting() {
+
+    if (window.Prism) {
+      Prism.languages.insertBefore('r', 'comment', {
+        'heading': [
+          {
+            // title 1
+        	  // =======
+
+        	  // title 2
+        	  // -------
+        	  pattern: /\w+.*(?:\r?\n|\r)(?:====+|----+)/,
+            alias: 'operator'
+          },
+          {
+            // ### title 3
+            pattern: /(^\s*)###[^#].+/m,
+            lookbehind: true,
+            alias: 'operator'
+          }
+        ]
+      });
+
+      // prism highlight
+      Prism.highlightAll();
+    }
+  }
+
+
+  // get theme color
+  var themeColors = {
+    bootstrap: {
+      primary: "rgba(51, 122, 183, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cerulean: {
+      primary: "rgb(47, 164, 231)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    journal: {
+      primary: "rgba(235, 104, 100, 0.70)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    flatly: {
+      primary: "rgba(44, 62, 80, 0.70)",
+      info: "rgba(52, 152, 219, 0.70)",
+      success: "rgba(24, 188, 156, 0.70)",
+      warning: "rgba(243, 156, 18, 0.70)",
+      danger: "rgba(231, 76, 60, 0.70)"
+    },
+    readable: {
+      primary: "rgba(69, 130, 236, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    spacelab: {
+      primary: "rgba(68, 110, 155, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    united: {
+      primary: "rgba(221, 72, 20, 0.30)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cosmo: {
+      primary: "rgba(39, 128, 227, 0.7)",
+      info: "rgba(153, 84, 187, 0.7)",
+      success: "rgba(63, 182, 24, 0.7)",
+      warning: "rgba(255, 117, 24, 0.7)",
+      danger: "rgba(255, 0, 57, 0.7)"
+    },
+    lumen: {
+      primary: "rgba(21, 140, 186, 0.70)",
+      info: "rgba(117, 202, 235, 0.90)",
+      success: "rgba(40, 182, 44, 0.70)",
+      warning: "rgba(255, 133, 27, 0.70)",
+      danger: "rgba(255, 65, 54, 0.70)"
+    },
+    paper: {
+      primary: "rgba(33, 150, 243, 0.35)",
+      info: "rgb(225, 190, 231)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(255, 224, 178)",
+      danger: "rgb(249, 189, 187)"
+    },
+    sandstone: {
+      primary: "rgba(50, 93, 136, 0.3)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    simplex: {
+      primary: "rgba(217, 35, 15, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    yeti: {
+      primary: "rgba(0, 140, 186, 0.298039)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    }
+  }
+  function themeColor(color) {
+    return themeColors[_options.theme][color];
+  }
+
+  FlexDashboard.prototype = {
+    constructor: FlexDashboard,
+    init: init,
+    isMobilePhone: isMobilePhone,
+    isFillPage: isFillPage,
+    themeColor: themeColor
+  };
+
+  return FlexDashboard;
+
+})();
+
+// utils
+window.FlexDashboardUtils = {
+  resizableImage: function(img) {
+    var src = img.attr('src');
+    var url = 'url("' + src + '")';
+    img.parent().css('background', url)
+                .css('background-size', 'contain')
+                .css('background-repeat', 'no-repeat')
+                .css('background-position', 'center')
+                .addClass('image-container');
+  },
+  setLocation: function(href) {
+    if (history && history.pushState) {
+      history.pushState(null, null, href);
+    } else {
+      window.location.replace(href);
+    }
+    setTimeout(function() {
+        window.scrollTo(0, 0);
+    }, 10);
+    this.manageActiveNavbarMenu();
+  },
+  showPage: function(href) {
+    $('ul.navbar-nav li a[href="' + href + '"]').tab('show');
+    var baseUrl = this.urlWithoutHash(window.location.href);
+    var loc = baseUrl + href;
+    this.setLocation(loc);
+  },
+  showLinkedValue: function(href) {
+    // check for a page link
+    if ($('ul.navbar-nav li a[data-toggle=tab][href="' + href + '"]').length > 0)
+      this.showPage(href);
+    else
+      window.open(href);
+  },
+  urlWithoutHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(0, hashLoc);
+    else
+      return url;
+  },
+  urlHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(hashLoc);
+    else
+      return "";
+  },
+  manageActiveNavbarMenu: function () {
+    // remove active from anyone currently active
+    $('.navbar ul.nav').find('li').removeClass('active');
+    // find the active tab
+    var activeTab = $('.dashboard-page-wrapper.tab-pane.active');
+    if (activeTab.length > 0) {
+      var tabId = activeTab.attr('id');
+      if (tabId)
+        $(".navbar ul.nav a[href='#" + tabId + "']").parents('li').addClass('active');
+    }
+  }
+};
+
+window.FlexDashboard = new FlexDashboard();
+
+// empty content
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    if (container.find('p').length == 0)
+      return container;
+    else
+      return $();
+  }
+})
+
+// plot image
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('p')
+                    .children('img:only-child');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// plot image (figure style)
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.figure').children('img');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// htmlwidget
+window.FlexDashboardComponents.push({
+
+  init: function(dashboardContainer) {
+    // trigger "shown" after initial layout to force static htmlwidgets
+    // in runtime: shiny to be resized after the dom has been transformed
+    dashboardContainer.on('flexdashboard:layoutcomplete', function(event) {
+      setTimeout(function() {
+        dashboardContainer.trigger('shown');
+      }, 200);
+    });
+  },
+
+  find: function(container) {
+    return container.children('div[id^="htmlwidget-"],div.html-widget');
+  }
+});
+
+// gauge
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.html-widget.gauge');
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+
+  }
+
+});
+
+// shiny output
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.children('div[class^="shiny-"]');
+  }
+});
+
+// datatables
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.find('.datatables');
+  },
+  flex: function(fillPage) {
+    return fillPage;
+  }
+});
+
+// bootstrap table
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    var bsTable = container.find('table.table');
+    if (bsTable.length !== 0)
+      return bsTable;
+    else
+      return container.find('tr.header').parent('thead').parent('table');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var bsTable = element;
+
+    // fixup xtable generated tables with a proper thead
+    var headerRow = bsTable.find('tbody > tr:first-child > th').parent();
+    if (headerRow.length > 0) {
+      var thead = $('<thead></thead>');
+      bsTable.prepend(thead);
+      headerRow.detach().appendTo(thead);
+    }
+
+    // improve appearance
+    container.addClass('bootstrap-table');
+
+    // for fill page provide scrolling w/ sticky headers
+    if (fillPage) {
+      // force scrollbar on overflow
+      container.addClass('flowing-content-shim');
+
+      // stable table headers when scrolling
+      bsTable.stickyTableHeaders({
+        scrollableArea: container
+      });
+    }
+  }
+});
+
+// embedded shiny app
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('iframe.shiny-frame');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage) {
+      element.attr('height', '100%');
+    } else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (!height)
+        height = element.attr('height');
+      if (!height)
+        element.attr('height', 500);
+    }
+  }
+});
+
+// shiny fillRow or fillCol
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('.flexfill-container');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage)
+      element.css('height', '100%');
+    else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (height === "100%" || height === "auto" || height === "initial" ||
+          height === "inherit" || !height) {
+        element.css('height', 500);
+      }
+    }
+  }
+});
+
+// valueBox
+window.FlexDashboardComponents.push({
+
+  type: "custom",
+
+  find: function(container) {
+    if (container.find('span.value-output, .shiny-valuebox-output').length)
+      return container;
+    else
+      return $();
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var chartTitle = title;
+    var valueBox = element;
+
+    // add value-box class to container
+    container.addClass('value-box');
+
+    // value paragraph
+    var value = $('<p class="value"></p>');
+
+    // if we have shiny-text-output then just move it in
+    var valueOutputSpan = [];
+    var shinyOutput = valueBox.find('.shiny-valuebox-output').detach();
+    if (shinyOutput.length) {
+      valueBox.children().remove();
+      shinyOutput.html("&mdash;");
+      value.append(shinyOutput);
+    } else {
+      // extract the value (remove leading vector index)
+      var chartValue = valueBox.text().trim();
+      chartValue = chartValue.replace("[1] ", "");
+      valueOutputSpan = valueBox.find('span.value-output').detach();
+      valueBox.children().remove();
+      value.text(chartValue);
+    }
+
+    // caption
+    var caption = $('<p class="caption"></p>');
+    caption.append(chartTitle);
+
+    // build inner div for value box and add it
+    var inner = $('<div class="inner"></div>');
+    inner.append(value);
+    inner.append(caption);
+    valueBox.append(inner);
+
+    // add icon if specified
+    var icon = $('<div class="icon"><i></i></div>');
+    valueBox.append(icon);
+    function setIcon(chartIcon) {
+      var iconLib = "";
+      var iconSplit = chartIcon.split(" ");
+      if (iconSplit.length > 1) {
+        iconLib = iconSplit[0];
+        chartIcon = iconSplit.slice(1).join(" ");
+      } else {
+        var components = chartIcon.split("-");
+        if (components.length > 1)
+          iconLib = components[0];
+      }
+      icon.children('i').attr('class', iconLib + ' ' + chartIcon);
+    }
+    var chartIcon = valueBox.attr('data-icon');
+    if (chartIcon)
+      setIcon(chartIcon);
+
+    // set color based on data-background if necessary
+    var dataBackground = valueBox.attr('data-background');
+    if (dataBackground)
+      valueBox.css('background-color', bgColor);
+    else {
+      // default to bg-primary if no other background is specified
+      if (!valueBox.hasClass('bg-primary') &&
+          !valueBox.hasClass('bg-info') &&
+          !valueBox.hasClass('bg-warning') &&
+          !valueBox.hasClass('bg-success') &&
+          !valueBox.hasClass('bg-danger')) {
+        valueBox.addClass('bg-primary');
+      }
+    }
+
+    // handle data attributes in valueOutputSpan
+    function handleValueOutput(valueOutput) {
+
+      // caption
+      var dataCaption = valueOutput.attr('data-caption');
+      if (dataCaption)
+        caption.html(dataCaption);
+
+      // icon
+      var dataIcon = valueOutput.attr('data-icon');
+      if (dataIcon)
+        setIcon(dataIcon);
+
+      // color
+      var dataColor = valueOutput.attr('data-color');
+      if (dataColor) {
+        if (dataColor.indexOf('bg-') === 0) {
+          valueBox.css('background-color', '');
+          if (!valueBox.hasClass(dataColor)) {
+             valueBox.removeClass('bg-primary bg-info bg-warning bg-danger bg-success');
+             valueBox.addClass(dataColor);
+          }
+        } else {
+          valueBox.removeClass('bg-primary bg-info bg-warning bg-danger bg-success');
+          valueBox.css('background-color', dataColor);
+        }
+      }
+
+      // url
+      var dataHref = valueOutput.attr('data-href');
+      if (dataHref) {
+        valueBox.addClass('linked-value');
+        valueBox.off('click.value-box');
+        valueBox.on('click.value-box', function(e) {
+          window.FlexDashboardUtils.showLinkedValue(dataHref);
+        });
+      }
+    }
+
+    // check for a valueOutputSpan
+    if (valueOutputSpan.length > 0) {
+      handleValueOutput(valueOutputSpan);
+    }
+
+    // if we have a shinyOutput then bind a listener to handle
+    // new valueOutputSpan values
+    shinyOutput.on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+          var valueOutputSpan = element.find('span.value-output');
+          if (valueOutputSpan.length > 0)
+            handleValueOutput(valueOutputSpan);
+        }, 10);
+      }
+    );
+  }
+});
+</script>
+
+<div id="dashboard-container">
+
+<div id="column" class="section level2" data-width="650">
+<h2>Column</h2>
+<div id="map" class="section level3">
+<h3>Map</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-fa857754f2751abae6b2" style="width:576px;height:460.8px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fa857754f2751abae6b2">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addCircleMarkers","args":[[45.52646211,45.5081532,45.53146071,45.5301398,45.5225034,45.52914205,45.4902606,45.52862062,45.55076344,45.55902314,45.51556831,45.50910258,45.55907103,45.5190408,45.5590435,45.51844688,45.51636144,45.52374151,45.55905507,45.55458563,45.51623176,45.52976024,45.53715171,45.53893649,45.52142066,45.51592353,45.49333654,45.56282546,45.53211645,45.53290424,45.49787392,45.5140185,45.51645917,45.51609691,45.55522233,45.50350608,45.53479718,45.51633325,45.51936283,45.51222277,45.51189243,45.50971347,45.5286366,45.54107815,45.51195046,45.53550403,45.49913657,45.5699526,45.53434532,45.5123205,45.53508224,45.51544427,45.52642975,45.51202353,45.50624163,45.576983,45.50468892,45.51184309,45.55941042,45.5717805,45.52297292,45.52196048,45.51515295,45.52871176,45.5559258,45.5627419,45.56244707,45.53080401,45.5152252,45.53140997,45.56250716,45.54827571,45.50280906,45.52556242,45.5190613,45.5033655,45.51186486,45.53086696,45.55916922,45.5205931,45.5464321,45.51946243,45.5282777,45.52440674,45.55645437,45.54998583,45.54828551,45.55836114,45.5335216,45.5536928,45.5475928,45.55335313,45.4797127,45.49723033,45.51889487,45.56267617,45.50473239,45.52373453,45.5591179,45.51898132,45.5627673,45.56274555,45.52181825,45.5482433,45.51158277,45.51803412,45.51147657,45.56271655,45.55908767,45.5120818,45.52247868,45.51788377,45.50225355,45.52487653,45.5251286,45.52634601,45.52269573,45.50936198,45.52771962,45.52500056,45.53496857,45.52175423,45.54179953,45.50356665,45.5422831,45.51507401,45.553917,45.53142501,45.511907,45.52279251,45.52968884,45.5256166,45.5311,45.51299715,45.53966541,45.55891838,45.49684155,45.53689808,45.51434624,45.52536699,45.56251948,45.52279251,45.5502248,45.5420646,45.5590714,45.53677138,45.53344,45.53409115,45.55568352,45.52826831,45.49429475,45.53083126,45.52358836,45.53577751,45.55913676,45.52378902,45.569917,45.52643433,45.4863971,45.4950271,45.5178988,45.50509011,45.5446211,45.5554316,45.5211726,45.50528482,45.56453067,45.51649676,45.5239729,45.49334301,45.52507854,45.51782551,45.5160452,45.5027677,45.5048393,45.51658489,45.50512504,45.50523618,45.52649493,45.54125782,45.53561394,45.53400578,45.56197102,45.52996934,45.53232501,45.5604984,45.54830706,45.5232333333333,45.524418,45.5644291666667,45.5181085,45.5263715,45.520358,45.5363985,45.5651273333333,45.4961868333333,45.5772648333333,45.5249906666667,45.5266218333333,45.5123928333333,45.5169668333333,45.5717906666667,45.5117778333333,45.5601578333333,45.5163846666667,45.526369,45.5342965,45.5310133333333,45.5063976666667,45.530515,45.5119818333333,45.5519905,45.533607,45.546783,45.5230865,45.5345293333333,45.505033,45.505693,45.5332735,45.5676605,45.5333591666667,45.571866,45.528649,45.5157201666667,45.55448,45.5100788333333,45.5771731666667,45.5352013333333,45.5605613333333,45.5307233333333,45.5305751666667,45.556216,45.518471,45.5175686666667,45.5248316666667,45.517233,45.5122895,45.5162733333333,45.5196126666667,45.5627298333333,45.5259895,45.5388925,45.5592005,45.5101956666667,45.5208233333333,45.5300418333333,45.5234396666667,45.5119885,45.5547941666667,45.5198656666667,45.5175963333333,45.5621018333333,45.5295303333333,45.518745,45.5668546666667,45.5342518333333,45.5638791666667,45.5200853333333,45.5335135,45.5023353333333,45.535111,45.4852815,45.5570005,45.5121261666667,45.489248,45.5225706666667,45.5551658333333,45.4906101666667,45.5272083333333,45.5118801666667,45.5348008333333,45.5354626666667,45.5052721666667,45.5192101666667,45.5221496666667,45.5732291666667,45.5094693333333,45.5256846666667,45.5638373333333,45.489452,45.5241558333333,45.5256703333333,45.5503301666667,45.5298545,45.5262356666667,45.523152,45.5176383333333,45.5298486666667,45.5341455,45.5080186666667,45.4903733333333,45.5734638333333,45.533591,45.520383,45.535144,45.5342906666667,45.5603256666667,45.5078271666667,45.5283405,45.5347258333333,45.571714,45.5306005,45.5234441666667,45.5402876666667,45.5361431666667,45.534378,45.559086,45.5774085,45.5337713333333,45.5236368333333,45.530523,45.5716695,45.5255915,45.5348443333333,45.524239,45.5337473333333,45.522098,45.535533,45.4910376666667,45.5768561666667,45.517761,45.5717425,45.5602558333333,45.5288985,45.5273131666667,45.5120806666667,45.504888,45.501625,45.4898755,45.5044713333333,45.5211878333333,45.5664295,45.5080056666667,45.577264,45.5301661666667,45.522589,45.5655675,45.571817,45.5291256666667,45.558968,45.5361185,45.5171643333333,45.5258398333333,45.4912038333333,45.5163635,45.5129138333333,45.503242,45.5221771666667,45.4920001666667,45.5698786666667,45.5243295,45.5587736666667,45.5238255,45.5323158333333,45.5241975,45.5221688333333,45.5340161666667,45.5236356666667,45.5376718333333,45.5210903333333,45.5346911666667,45.5334191666667,45.5532715,45.5255678333333,45.5597785,45.5044545,45.5225086666667,45.5216533333333,45.5589546666667,45.4997438333333,45.5222855,45.5044791666667,45.5161371666667,45.5143448333333,45.5223705,45.5346593333333,45.5188978333333,45.565132,45.5342376666667,45.5258683333333,45.537459,45.5279596666667,45.5529985,45.5301281666667,45.5138708333333,45.5349318333333,45.5193153333333,45.5176338333333,45.5292018333333,45.5059576666667,45.5361625,45.4961891666667,45.5228976666667,45.5195458333333,45.5191191666667,45.5279141666667,45.5186773333333,45.5314888333333,45.5360618333333,45.5310398333333,45.5211241666667,45.5327873333333,45.5519261666667,45.5544405,45.5213183333333,45.4905725,45.5173998333333,45.5046801666667,45.526755,45.524837,45.5179615,45.5071095,45.5591111666667,45.5727028333333,45.5296855,45.5627748333333,45.5235276666667,45.5274216666667,45.5142585,45.5209273333333,45.4970753333333,45.498773,45.5669183333333,45.5627645,45.518792,45.5337353333333,45.5340563333333,45.5337038333333,45.5347596666667,45.5519933333333,45.533423,45.5152958333333,45.4916848333333,45.5178343333333,45.528591,45.5337118333333,45.5386591666667,45.5276533333333,45.5706533333333,45.536129,45.517402,45.5142685,45.4754591666667,45.5048418333333,45.522153,45.5615825,45.5664026666667,45.533736,45.5325428333333,45.5167613333333,45.5229846666667,45.5139326666667,45.5242315,45.5198225,45.516528,45.5033763333333,45.5303935,45.5298195,45.558358,45.4741001666667,45.5203536666667,45.5429756666667,45.5342146666667,45.5151295,45.5279208333333,45.4808333333333,45.5448946666667,45.5303465,45.5770065,45.5299085,45.519772,45.5265563333333,45.524431,45.5691388333333,45.52769,45.5343633333333,45.5255263333333,45.5615446666667,45.5051621666667,45.5718423333333,45.5166285],[-122.6093034,-122.5978065,-122.659741,-122.6546824,-122.557861,-122.6987028,-122.5785721,-122.6905073,-122.6668663,-122.6355462,-122.6738924,-122.6735169,-122.6475437,-122.5469176,-122.6340066,-122.651685,-122.6460457,-122.6818129,-122.6427104,-122.6755413,-122.6360679,-122.6966429,-122.6881027,-122.6432884,-122.6726291,-122.6833123,-122.6233971,-122.6747467,-122.6986304,-122.68626,-122.6375156,-122.5642134,-122.6189983,-122.6790771,-122.6818612,-122.6110657,-122.6686594,-122.6566324,-122.6359928,-122.6454261,-122.6113057,-122.6777159,-122.6820195,-122.6769716,-122.6141596,-122.7006608,-122.6716433,-122.695712,-122.6848841,-122.6789108,-122.6505639,-122.6846749,-122.6347187,-122.6363119,-122.6633379,-122.6819395,-122.6345551,-122.68372,-122.6685226,-122.6564844,-122.6434118,-122.6896772,-122.665776,-122.674166,-122.6008129,-122.6889932,-122.6848358,-122.6844227,-122.6783454,-122.6574612,-122.5943702,-122.6111636,-122.6535398,-122.6892561,-122.5584874,-122.6447314,-122.6210475,-122.6658887,-122.6514316,-122.637238,-122.5933109,-122.6795143,-122.6766282,-122.6497686,-122.6603794,-122.6756573,-122.6508106,-122.6203609,-122.5582468,-122.6304676,-122.6667604,-122.6669146,-122.5686256,-122.6354054,-122.6774061,-122.6946044,-122.62528,-122.6372065,-122.6535114,-122.6812685,-122.6598278,-122.6480594,-122.7044079,-122.6409548,-122.682281,-122.6755071,-122.6662856,-122.6350486,-122.6407517,-122.6533493,-122.6732969,-122.6920402,-122.6753193,-122.6965141,-122.6852508,-122.6941484,-122.6703492,-122.6812121,-122.6603526,-122.6811048,-122.653631,-122.6810794,-122.6614845,-122.6395279,-122.6037107,-122.6870298,-122.6020709,-122.6895659,-122.6294804,-122.6840124,-122.6618063,-122.6852615,-122.56249,-122.6567262,-122.6118851,-122.6824003,-122.6276927,-122.6199692,-122.6558371,-122.6725459,-122.6770306,-122.6566163,-122.5837839,-122.6308254,-122.646602,-122.61884,-122.55386,-122.6949424,-122.6506644,-122.6945615,-122.6719048,-122.6815957,-122.6619177,-122.620613,-122.6554307,-122.6747386,-122.6744197,-122.6362449,-122.5889343,-122.6076627,-122.6600522,-122.57900777,-122.667667,-122.5890544,-122.6763654,-122.6108846,-122.6305372,-122.6307517,-122.6932457,-122.6369745,-122.6775563,-122.6724963,-122.5539214,-122.6714408,-122.6296306,-122.6160378,-122.6533681,-122.6121104,-122.6416328,-122.6966717,-122.6636343,-122.6555675,-122.6820369,-122.6632373,-122.6824299,-122.6621038,-122.6136768,-122.678701,-122.675600833333,-122.635079833333,-122.6767275,-122.591889833333,-122.673205166667,-122.704832166667,-122.627620166667,-122.683776666667,-122.6975015,-122.602453166667,-122.684304333333,-122.620163333333,-122.6309955,-122.6526865,-122.647413666667,-122.637838,-122.655423333333,-122.558906666667,-122.649652333333,-122.676835333333,-122.578819333333,-122.696474666667,-122.618000166667,-122.647360833333,-122.653484,-122.654598666667,-122.681178833333,-122.621379333333,-122.674302,-122.579922,-122.620136,-122.684164166667,-122.684558833333,-122.681958333333,-122.685591166667,-122.655652333333,-122.663616666667,-122.569239666667,-122.688288666667,-122.623187,-122.673011666667,-122.692683166667,-122.687559666667,-122.641893833333,-122.673972333333,-122.680719333333,-122.660827333333,-122.659335666667,-122.648646,-122.673398333333,-122.6750055,-122.675486333333,-122.681397833333,-122.6615195,-122.652418333333,-122.685562333333,-122.678693833333,-122.656807166667,-122.677427166667,-122.6375795,-122.6679545,-122.675217333333,-122.673067833333,-122.620495666667,-122.681061166667,-122.663718333333,-122.660987,-122.6466195,-122.626740166667,-122.685226333333,-122.635782,-122.671985833333,-122.652355333333,-122.634865666667,-122.609958833333,-122.650930833333,-122.596055333333,-122.673985166667,-122.629426166667,-122.59984,-122.6766275,-122.6202845,-122.645032833333,-122.699459,-122.600651166667,-122.6751205,-122.637174333333,-122.638199666667,-122.682286,-122.681002666667,-122.6277205,-122.596557166667,-122.684136166667,-122.681231166667,-122.676439,-122.632748833333,-122.637406166667,-122.634537833333,-122.680245,-122.680629166667,-122.696584166667,-122.680545833333,-122.622848,-122.6874505,-122.608864166667,-122.677688,-122.6212675,-122.660320333333,-122.6205025,-122.645065,-122.6388455,-122.6993145,-122.658106,-122.691131333333,-122.6022645,-122.667794833333,-122.666833833333,-122.6366905,-122.636615,-122.667956,-122.587132666667,-122.69829,-122.6876615,-122.646713166667,-122.684448666667,-122.696113833333,-122.683237,-122.596045833333,-122.678345333333,-122.699512,-122.625947166667,-122.695388166667,-122.661747333333,-122.6581195,-122.6400475,-122.6382885,-122.6796265,-122.630356166667,-122.643858833333,-122.613116166667,-122.567332,-122.6110585,-122.698014666667,-122.6953415,-122.680300333333,-122.6975025,-122.690577833333,-122.6917745,-122.672762,-122.647068166667,-122.636858,-122.637965,-122.666759166667,-122.629684333333,-122.681166833333,-122.5755355,-122.633793333333,-122.624378666667,-122.657928333333,-122.684412833333,-122.633738833333,-122.6483985,-122.683077833333,-122.648807666667,-122.6777205,-122.663862333333,-122.661627,-122.638169333333,-122.660620333333,-122.677702,-122.599392166667,-122.661515166667,-122.698642833333,-122.690281666667,-122.661919666667,-122.6784785,-122.676924,-122.562212666667,-122.562946833333,-122.662372166667,-122.638218833333,-122.633664833333,-122.675287166667,-122.562317833333,-122.5785525,-122.653453833333,-122.545254,-122.698582,-122.663729,-122.609240166667,-122.662318833333,-122.681226833333,-122.666563166667,-122.643285666667,-122.642041833333,-122.683445833333,-122.5608475,-122.652904,-122.603723,-122.678662333333,-122.694501333333,-122.578578666667,-122.666749666667,-122.629862333333,-122.679984666667,-122.675269,-122.683853833333,-122.628636666667,-122.660953333333,-122.641299333333,-122.686261166667,-122.704534666667,-122.697881666667,-122.635702666667,-122.647506,-122.653166833333,-122.678129833333,-122.59987,-122.684628,-122.611046833333,-122.660551333333,-122.695732,-122.6230785,-122.645063333333,-122.650683333333,-122.6818915,-122.698880333333,-122.663767666667,-122.677379,-122.676491833333,-122.6518375,-122.670833666667,-122.608931166667,-122.637693666667,-122.660976833333,-122.659065166667,-122.679770666667,-122.635018833333,-122.6526845,-122.635004666667,-122.698642833333,-122.647378666667,-122.635474,-122.6019275,-122.575489666667,-122.6822205,-122.684875333333,-122.661521,-122.689617,-122.675680333333,-122.706675166667,-122.666755166667,-122.675830666667,-122.650836833333,-122.648874666667,-122.6337735,-122.660029333333,-122.630024166667,-122.695308,-122.634992,-122.660762,-122.602131666667,-122.608469833333,-122.560645666667,-122.683033833333,-122.677890833333,-122.6505565,-122.678515833333,-122.588668666667,-122.675280666667,-122.687382833333,-122.648745666667,-122.6414395,-122.661369166667,-122.696706166667,-122.560101666667,-122.6770385,-122.567091833333,-122.661688333333,-122.692464666667,-122.687125833333,-122.660304666667,-122.675211666667,-122.6777845,-122.637280333333,-122.6201175,-122.675607166667,-122.661315166667,-122.677705666667,-122.630135833333,-122.684050166667,-122.6470705,-122.621312666667],[7,2,2,7,6,6,2,2,3,7,9,3,1,2,1,3,3,5,0,2,7,0,2,1,0,3,2,4,6,1,3,4,1,3,5,2,2,4,4,9,4,1,8,0,1,12,6,1,2,4,8,5,1,5,7,2,5,2,1,4,8,3,8,6,6,5,1,5,0,9,3,3,2,6,3,5,1,2,0,0,7,7,5,8,1,11,1,2,7,5,8,5,10,0,9,1,0,3,1,9,0,8,2,0,6,5,5,2,6,3,9,13,0,3,2,10,6,6,0,2,4,6,1,0,1,3,1,7,9,8,0,2,1,3,4,5,7,1,4,6,0,0,2,1,0,0,6,7,6,5,9,6,1,1,3,4,1,6,4,3,5,2,3,2,7,0,0,11,4,1,0,6,3,3,2,1,8,0,4,2,2,0,0,2,13,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":2,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[45.52646211,45.5081532,45.53146071,45.5301398,45.5225034,45.52914205,45.4902606,45.52862062,45.55076344,45.55902314,45.51556831,45.50910258,45.55907103,45.5190408,45.5590435,45.51844688,45.51636144,45.52374151,45.55905507,45.55458563,45.51623176,45.52976024,45.53715171,45.53893649,45.52142066,45.51592353,45.49333654,45.56282546,45.53211645,45.53290424,45.49787392,45.5140185,45.51645917,45.51609691,45.55522233,45.50350608,45.53479718,45.51633325,45.51936283,45.51222277,45.51189243,45.50971347,45.5286366,45.54107815,45.51195046,45.53550403,45.49913657,45.5699526,45.53434532,45.5123205,45.53508224,45.51544427,45.52642975,45.51202353,45.50624163,45.576983,45.50468892,45.51184309,45.55941042,45.5717805,45.52297292,45.52196048,45.51515295,45.52871176,45.5559258,45.5627419,45.56244707,45.53080401,45.5152252,45.53140997,45.56250716,45.54827571,45.50280906,45.52556242,45.5190613,45.5033655,45.51186486,45.53086696,45.55916922,45.5205931,45.5464321,45.51946243,45.5282777,45.52440674,45.55645437,45.54998583,45.54828551,45.55836114,45.5335216,45.5536928,45.5475928,45.55335313,45.4797127,45.49723033,45.51889487,45.56267617,45.50473239,45.52373453,45.5591179,45.51898132,45.5627673,45.56274555,45.52181825,45.5482433,45.51158277,45.51803412,45.51147657,45.56271655,45.55908767,45.5120818,45.52247868,45.51788377,45.50225355,45.52487653,45.5251286,45.52634601,45.52269573,45.50936198,45.52771962,45.52500056,45.53496857,45.52175423,45.54179953,45.50356665,45.5422831,45.51507401,45.553917,45.53142501,45.511907,45.52279251,45.52968884,45.5256166,45.5311,45.51299715,45.53966541,45.55891838,45.49684155,45.53689808,45.51434624,45.52536699,45.56251948,45.52279251,45.5502248,45.5420646,45.5590714,45.53677138,45.53344,45.53409115,45.55568352,45.52826831,45.49429475,45.53083126,45.52358836,45.53577751,45.55913676,45.52378902,45.569917,45.52643433,45.4863971,45.4950271,45.5178988,45.50509011,45.5446211,45.5554316,45.5211726,45.50528482,45.56453067,45.51649676,45.5239729,45.49334301,45.52507854,45.51782551,45.5160452,45.5027677,45.5048393,45.51658489,45.50512504,45.50523618,45.52649493,45.54125782,45.53561394,45.53400578,45.56197102,45.52996934,45.53232501,45.5604984,45.54830706,45.5232333333333,45.524418,45.5644291666667,45.5181085,45.5263715,45.520358,45.5363985,45.5651273333333,45.4961868333333,45.5772648333333,45.5249906666667,45.5266218333333,45.5123928333333,45.5169668333333,45.5717906666667,45.5117778333333,45.5601578333333,45.5163846666667,45.526369,45.5342965,45.5310133333333,45.5063976666667,45.530515,45.5119818333333,45.5519905,45.533607,45.546783,45.5230865,45.5345293333333,45.505033,45.505693,45.5332735,45.5676605,45.5333591666667,45.571866,45.528649,45.5157201666667,45.55448,45.5100788333333,45.5771731666667,45.5352013333333,45.5605613333333,45.5307233333333,45.5305751666667,45.556216,45.518471,45.5175686666667,45.5248316666667,45.517233,45.5122895,45.5162733333333,45.5196126666667,45.5627298333333,45.5259895,45.5388925,45.5592005,45.5101956666667,45.5208233333333,45.5300418333333,45.5234396666667,45.5119885,45.5547941666667,45.5198656666667,45.5175963333333,45.5621018333333,45.5295303333333,45.518745,45.5668546666667,45.5342518333333,45.5638791666667,45.5200853333333,45.5335135,45.5023353333333,45.535111,45.4852815,45.5570005,45.5121261666667,45.489248,45.5225706666667,45.5551658333333,45.4906101666667,45.5272083333333,45.5118801666667,45.5348008333333,45.5354626666667,45.5052721666667,45.5192101666667,45.5221496666667,45.5732291666667,45.5094693333333,45.5256846666667,45.5638373333333,45.489452,45.5241558333333,45.5256703333333,45.5503301666667,45.5298545,45.5262356666667,45.523152,45.5176383333333,45.5298486666667,45.5341455,45.5080186666667,45.4903733333333,45.5734638333333,45.533591,45.520383,45.535144,45.5342906666667,45.5603256666667,45.5078271666667,45.5283405,45.5347258333333,45.571714,45.5306005,45.5234441666667,45.5402876666667,45.5361431666667,45.534378,45.559086,45.5774085,45.5337713333333,45.5236368333333,45.530523,45.5716695,45.5255915,45.5348443333333,45.524239,45.5337473333333,45.522098,45.535533,45.4910376666667,45.5768561666667,45.517761,45.5717425,45.5602558333333,45.5288985,45.5273131666667,45.5120806666667,45.504888,45.501625,45.4898755,45.5044713333333,45.5211878333333,45.5664295,45.5080056666667,45.577264,45.5301661666667,45.522589,45.5655675,45.571817,45.5291256666667,45.558968,45.5361185,45.5171643333333,45.5258398333333,45.4912038333333,45.5163635,45.5129138333333,45.503242,45.5221771666667,45.4920001666667,45.5698786666667,45.5243295,45.5587736666667,45.5238255,45.5323158333333,45.5241975,45.5221688333333,45.5340161666667,45.5236356666667,45.5376718333333,45.5210903333333,45.5346911666667,45.5334191666667,45.5532715,45.5255678333333,45.5597785,45.5044545,45.5225086666667,45.5216533333333,45.5589546666667,45.4997438333333,45.5222855,45.5044791666667,45.5161371666667,45.5143448333333,45.5223705,45.5346593333333,45.5188978333333,45.565132,45.5342376666667,45.5258683333333,45.537459,45.5279596666667,45.5529985,45.5301281666667,45.5138708333333,45.5349318333333,45.5193153333333,45.5176338333333,45.5292018333333,45.5059576666667,45.5361625,45.4961891666667,45.5228976666667,45.5195458333333,45.5191191666667,45.5279141666667,45.5186773333333,45.5314888333333,45.5360618333333,45.5310398333333,45.5211241666667,45.5327873333333,45.5519261666667,45.5544405,45.5213183333333,45.4905725,45.5173998333333,45.5046801666667,45.526755,45.524837,45.5179615,45.5071095,45.5591111666667,45.5727028333333,45.5296855,45.5627748333333,45.5235276666667,45.5274216666667,45.5142585,45.5209273333333,45.4970753333333,45.498773,45.5669183333333,45.5627645,45.518792,45.5337353333333,45.5340563333333,45.5337038333333,45.5347596666667,45.5519933333333,45.533423,45.5152958333333,45.4916848333333,45.5178343333333,45.528591,45.5337118333333,45.5386591666667,45.5276533333333,45.5706533333333,45.536129,45.517402,45.5142685,45.4754591666667,45.5048418333333,45.522153,45.5615825,45.5664026666667,45.533736,45.5325428333333,45.5167613333333,45.5229846666667,45.5139326666667,45.5242315,45.5198225,45.516528,45.5033763333333,45.5303935,45.5298195,45.558358,45.4741001666667,45.5203536666667,45.5429756666667,45.5342146666667,45.5151295,45.5279208333333,45.4808333333333,45.5448946666667,45.5303465,45.5770065,45.5299085,45.519772,45.5265563333333,45.524431,45.5691388333333,45.52769,45.5343633333333,45.5255263333333,45.5615446666667,45.5051621666667,45.5718423333333,45.5166285],[-122.6093034,-122.5978065,-122.659741,-122.6546824,-122.557861,-122.6987028,-122.5785721,-122.6905073,-122.6668663,-122.6355462,-122.6738924,-122.6735169,-122.6475437,-122.5469176,-122.6340066,-122.651685,-122.6460457,-122.6818129,-122.6427104,-122.6755413,-122.6360679,-122.6966429,-122.6881027,-122.6432884,-122.6726291,-122.6833123,-122.6233971,-122.6747467,-122.6986304,-122.68626,-122.6375156,-122.5642134,-122.6189983,-122.6790771,-122.6818612,-122.6110657,-122.6686594,-122.6566324,-122.6359928,-122.6454261,-122.6113057,-122.6777159,-122.6820195,-122.6769716,-122.6141596,-122.7006608,-122.6716433,-122.695712,-122.6848841,-122.6789108,-122.6505639,-122.6846749,-122.6347187,-122.6363119,-122.6633379,-122.6819395,-122.6345551,-122.68372,-122.6685226,-122.6564844,-122.6434118,-122.6896772,-122.665776,-122.674166,-122.6008129,-122.6889932,-122.6848358,-122.6844227,-122.6783454,-122.6574612,-122.5943702,-122.6111636,-122.6535398,-122.6892561,-122.5584874,-122.6447314,-122.6210475,-122.6658887,-122.6514316,-122.637238,-122.5933109,-122.6795143,-122.6766282,-122.6497686,-122.6603794,-122.6756573,-122.6508106,-122.6203609,-122.5582468,-122.6304676,-122.6667604,-122.6669146,-122.5686256,-122.6354054,-122.6774061,-122.6946044,-122.62528,-122.6372065,-122.6535114,-122.6812685,-122.6598278,-122.6480594,-122.7044079,-122.6409548,-122.682281,-122.6755071,-122.6662856,-122.6350486,-122.6407517,-122.6533493,-122.6732969,-122.6920402,-122.6753193,-122.6965141,-122.6852508,-122.6941484,-122.6703492,-122.6812121,-122.6603526,-122.6811048,-122.653631,-122.6810794,-122.6614845,-122.6395279,-122.6037107,-122.6870298,-122.6020709,-122.6895659,-122.6294804,-122.6840124,-122.6618063,-122.6852615,-122.56249,-122.6567262,-122.6118851,-122.6824003,-122.6276927,-122.6199692,-122.6558371,-122.6725459,-122.6770306,-122.6566163,-122.5837839,-122.6308254,-122.646602,-122.61884,-122.55386,-122.6949424,-122.6506644,-122.6945615,-122.6719048,-122.6815957,-122.6619177,-122.620613,-122.6554307,-122.6747386,-122.6744197,-122.6362449,-122.5889343,-122.6076627,-122.6600522,-122.57900777,-122.667667,-122.5890544,-122.6763654,-122.6108846,-122.6305372,-122.6307517,-122.6932457,-122.6369745,-122.6775563,-122.6724963,-122.5539214,-122.6714408,-122.6296306,-122.6160378,-122.6533681,-122.6121104,-122.6416328,-122.6966717,-122.6636343,-122.6555675,-122.6820369,-122.6632373,-122.6824299,-122.6621038,-122.6136768,-122.678701,-122.675600833333,-122.635079833333,-122.6767275,-122.591889833333,-122.673205166667,-122.704832166667,-122.627620166667,-122.683776666667,-122.6975015,-122.602453166667,-122.684304333333,-122.620163333333,-122.6309955,-122.6526865,-122.647413666667,-122.637838,-122.655423333333,-122.558906666667,-122.649652333333,-122.676835333333,-122.578819333333,-122.696474666667,-122.618000166667,-122.647360833333,-122.653484,-122.654598666667,-122.681178833333,-122.621379333333,-122.674302,-122.579922,-122.620136,-122.684164166667,-122.684558833333,-122.681958333333,-122.685591166667,-122.655652333333,-122.663616666667,-122.569239666667,-122.688288666667,-122.623187,-122.673011666667,-122.692683166667,-122.687559666667,-122.641893833333,-122.673972333333,-122.680719333333,-122.660827333333,-122.659335666667,-122.648646,-122.673398333333,-122.6750055,-122.675486333333,-122.681397833333,-122.6615195,-122.652418333333,-122.685562333333,-122.678693833333,-122.656807166667,-122.677427166667,-122.6375795,-122.6679545,-122.675217333333,-122.673067833333,-122.620495666667,-122.681061166667,-122.663718333333,-122.660987,-122.6466195,-122.626740166667,-122.685226333333,-122.635782,-122.671985833333,-122.652355333333,-122.634865666667,-122.609958833333,-122.650930833333,-122.596055333333,-122.673985166667,-122.629426166667,-122.59984,-122.6766275,-122.6202845,-122.645032833333,-122.699459,-122.600651166667,-122.6751205,-122.637174333333,-122.638199666667,-122.682286,-122.681002666667,-122.6277205,-122.596557166667,-122.684136166667,-122.681231166667,-122.676439,-122.632748833333,-122.637406166667,-122.634537833333,-122.680245,-122.680629166667,-122.696584166667,-122.680545833333,-122.622848,-122.6874505,-122.608864166667,-122.677688,-122.6212675,-122.660320333333,-122.6205025,-122.645065,-122.6388455,-122.6993145,-122.658106,-122.691131333333,-122.6022645,-122.667794833333,-122.666833833333,-122.6366905,-122.636615,-122.667956,-122.587132666667,-122.69829,-122.6876615,-122.646713166667,-122.684448666667,-122.696113833333,-122.683237,-122.596045833333,-122.678345333333,-122.699512,-122.625947166667,-122.695388166667,-122.661747333333,-122.6581195,-122.6400475,-122.6382885,-122.6796265,-122.630356166667,-122.643858833333,-122.613116166667,-122.567332,-122.6110585,-122.698014666667,-122.6953415,-122.680300333333,-122.6975025,-122.690577833333,-122.6917745,-122.672762,-122.647068166667,-122.636858,-122.637965,-122.666759166667,-122.629684333333,-122.681166833333,-122.5755355,-122.633793333333,-122.624378666667,-122.657928333333,-122.684412833333,-122.633738833333,-122.6483985,-122.683077833333,-122.648807666667,-122.6777205,-122.663862333333,-122.661627,-122.638169333333,-122.660620333333,-122.677702,-122.599392166667,-122.661515166667,-122.698642833333,-122.690281666667,-122.661919666667,-122.6784785,-122.676924,-122.562212666667,-122.562946833333,-122.662372166667,-122.638218833333,-122.633664833333,-122.675287166667,-122.562317833333,-122.5785525,-122.653453833333,-122.545254,-122.698582,-122.663729,-122.609240166667,-122.662318833333,-122.681226833333,-122.666563166667,-122.643285666667,-122.642041833333,-122.683445833333,-122.5608475,-122.652904,-122.603723,-122.678662333333,-122.694501333333,-122.578578666667,-122.666749666667,-122.629862333333,-122.679984666667,-122.675269,-122.683853833333,-122.628636666667,-122.660953333333,-122.641299333333,-122.686261166667,-122.704534666667,-122.697881666667,-122.635702666667,-122.647506,-122.653166833333,-122.678129833333,-122.59987,-122.684628,-122.611046833333,-122.660551333333,-122.695732,-122.6230785,-122.645063333333,-122.650683333333,-122.6818915,-122.698880333333,-122.663767666667,-122.677379,-122.676491833333,-122.6518375,-122.670833666667,-122.608931166667,-122.637693666667,-122.660976833333,-122.659065166667,-122.679770666667,-122.635018833333,-122.6526845,-122.635004666667,-122.698642833333,-122.647378666667,-122.635474,-122.6019275,-122.575489666667,-122.6822205,-122.684875333333,-122.661521,-122.689617,-122.675680333333,-122.706675166667,-122.666755166667,-122.675830666667,-122.650836833333,-122.648874666667,-122.6337735,-122.660029333333,-122.630024166667,-122.695308,-122.634992,-122.660762,-122.602131666667,-122.608469833333,-122.560645666667,-122.683033833333,-122.677890833333,-122.6505565,-122.678515833333,-122.588668666667,-122.675280666667,-122.687382833333,-122.648745666667,-122.6414395,-122.661369166667,-122.696706166667,-122.560101666667,-122.6770385,-122.567091833333,-122.661688333333,-122.692464666667,-122.687125833333,-122.660304666667,-122.675211666667,-122.6777845,-122.637280333333,-122.6201175,-122.675607166667,-122.661315166667,-122.677705666667,-122.630135833333,-122.684050166667,-122.6470705,-122.621312666667],[1,4,6,5,3,10,3,12,9,11,9,23,8,3,8,10,8,13,9,9,7,10,13,10,18,15,2,11,8,17,2,1,9,14,13,2,10,14,13,4,5,16,6,12,3,6,7,4,3,8,3,5,11,13,11,2,13,21,14,3,2,15,2,10,2,13,17,11,6,0,5,3,8,11,3,13,16,15,12,24,2,11,6,10,17,7,9,6,4,1,8,6,0,5,11,11,5,15,8,11,4,4,6,5,10,13,11,15,3,13,9,2,6,15,8,2,12,6,8,14,14,10,16,6,2,7,5,5,3,9,8,3,5,3,4,14,2,5,0,7,8,11,3,3,9,4,4,5,6,7,5,10,5,9,15,3,4,9,7,8,13,4,5,1,10,6,1,0,13,4,17,12,2,16,13,3,10,5,8,2,9,8,8,6,3,6,11,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":2,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[45.4741001666667,45.5774085],"lng":[-122.706675166667,-122.545254]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="column-1" class="section level2" data-width="350">
+<h2>Column</h2>
+<div id="data-table" class="section level3">
+<h3>Data table</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-a6bdff4b723604dc6527" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a6bdff4b723604dc6527">{"x":{"filter":"none","fillContainer":true,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282","283","284","285","286","287","288","289","290","291","292","293","294","295","296","297","298","299","300","301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318","319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334","335","336","337","338","339","340","341","342","343","344","345","346","347","348","349","350","351","352","353","354","355","356","357","358","359","360","361","362","363","364","365","366","367","368","369","370","371","372","373","374","375","376","377","378","379","380","381","382","383","384","385","386","387","388","389","390","391","392","393","394","395","396","397","398","399","400","401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422","423","424","425","426","427","428","429","430","431","432","433","434","435","436","437","438","439","440","441","442","443","444","445","446","447","448","449","450","451","452","453","454","455","456","457","458","459","460","461","462","463","464","465","466","467","468","469","470","471","472","473","474","475","476","477","478","479","480","481"],["1440913901854998660","1480244093660483314","1440913915704427520","1440913829805081458","1454652773980638046","1440913966279508184","1472781728837052268","1440913932884296732","1440913795445343038","1440913885639656392","1440914138304122232","1440914121862858038","1440913880380162160","1480244102250417914","1480244097955450614","1440913987980266658","1440914035224906986","1440913950064165948","1440913881344689088","1440913812625212248","1440913992049311996","1440913941474231334","1440913957915495540","1440913841725456440","1440914083208152312","1440914116603363770","1440914010193708188","1440913799740310342","1440913941474231340","1440913971539002462","1440914060768788840","1472781733132019568","1440914039519874290","1440914091059481920","1440913816920179550","1440914017819115816","1440913821215146858","1440914027373577396","1440913996344279296","1440914056699743496","1440914022114083118","1440914100388021524","1440913962210462840","1440913816920179552","1440914014488675490","1440913983685299354","1440914103718461862","1464631188172231038","1440913974869442794","1440914104682988826","1440913834100048758","1440914074618217706","1440913846984950672","1440913993013838974","1440913996344279298","1464631188172231042","1440914001603773578","1440914095128527258","1440913821215146854","1464631192467198342","1440913838395016060","1440914108977956132","1440914069584645404","1440913970574475490","1440913876085194858","1440913804035277640","1440913795445343034","1440913927624802472","1456140958053603248","1440913914739900562","1440913894229590996","1440913864164819880","1440914052404776192","1440913928589329426","1456086692230960482","1440914043814841594","1440914013524148510","1440913923329835164","1440913880380162158","1440913988718871668","1459024287353491654","1440914112534318436","1440913980128937064","1440913919999394818","1440913906149965958","1440913808330244946","1440913898524558302","1440913858905325648","1459019849658395180","1475393691475085892","1440913825510114158","1440913804035277644","1458693501507405978","1440914066028283098","1440914091059481924","1440913791150375734","1440914009455103170","1440913841725456442","1480244097955450612","1440914125193298376","1456140958053603252","1440913837430489136","1440914121124253042","1471660436585799816","1440914129488265680","1440914086764514614","1440914043814841592","1440913911409460218","1440913884675129460","1440914061733315796","1440914082469547316","1440914082243625346","1440913983459377396","1440913953394606284","1459019845363427880","1440913961984540882","1440914113272923436","1440914087503119616","1440913786855408432","1440913924294362120","1440913889934623692","1440914073653690746","1440913914739900560","1440914047883886932","1475393691475085898","1440914078174580010","1440913894229591002","1440913932884296726","1440914004934213902","1440914099649416530","1440913910444933258","1459019845363427878","1454284004050750174","1440914030929939682","1440913868459787180","1440913791150375730","1440914005898740884","1440913859869852574","1440914065063756144","1440913944804671680","1440913808330244944","1440914027373577398","1481015392272555424","1471660432290832512","1484982920426338730","1440913859869852578","1448727096877427868","1440913980128937062","1440913829805081460","1440913937179264036","1440914108239351132","1440913966279508188","1440913889934623696","1440913854610358348","1440913876085194860","1440913949099638980","1484982916131371432","1440913842689983370","1458693505802373278","1475770068410544440","1440914030704017724","1454280066339194724","1440913812625212250","1473197832631849206","1440914095354449222","1440914022114083116","1440913854610358344","1440914039519874284","1456383622081679656","1440914056699743492","1440913950064165944","1440914116603363768","1480244102250417912","1440914130452792640","1440914000639246602","1440914040258479302","1440914047883886936","1440914018045037774","1440913898524558306","1440913970574475492","1440913846020423744","1440913825510114160","1440913799740310340","1440913907114492912","1440913924294362124","1464586049118850668","1440913863200292958","46358093355f1ab7936352cf45f17c13","f1800bc854a0b9be4d79f22c58234cb5","779c8a35373ca28df9ba53658c48180e","63f3b4a7dde1b307f66bb2dbbcd4eaba","4cb31155ebb3089929cc928693b4a959","4d59969d696447fb3e81dd1ad135d1d6","807a8160012c49fb66eeb36d30c394c5","6aa099c368b728f07994a58590be6ee9","93093d7beeae0743c5a72ab2131fb5e5","be8fe5feb669f53ae131244d8ead2add","cd56f118a15999f2709d47ed58291657","d80334bc8cec427bbd5c8791758181d2","74533db71b7ac4fe9e11ed94c87d9a2e","529c649202c329d57d85b6b24819c00b","f6c36d5b604fed5fe2fcbf5f88134fec","9a082296f6954a06a31d05511616866c","30f1c7d26f5ff4afbe455be7ae9fa0c1","6ed006ece1f3b0a9ff5f43d00ff82365","9b19d3bbd36eadea73a8e849f02e8df1","0c0b8cc4ebb1c96d70800d92f327d343","468944a63e52ac98320d794aa09c78cf","8a2d9dca18803fb11c4d900545a7d59f","5ad5a88f355f71fcddea8bcc377cdc95","3f1cb42c76e8e224944a01447f2e4cd2","b71376cc3e99b88858d58b10924ace6d","1589ab81c2b0589f00c995b5533b1884","e7e3dac3243854f3570bbfeb2259a01f","e9fe163c46b6923a91764c0e64df7030","cb04e83df4bf7e3e8a63e519635bab9e","a5fcdf2d32c02376136f0893b34c6b16","f34078150e3071191a63b74ccd3584a0","37a8b35c430c00c1293cc421e6e8ffc3","4c9306fd55d4194e07e66b0cf35fcf72","438bd506d630b0c9aa24ad698a6fea57","dec8f16dccce13f6fe876a8621b50a49","4ce59cab5eacc7b0a0bdc916050d086a","a8f01da92c12c812a7455b9cb9845a06","643486a2c55482196dfe510fb120185e","098c319dcdda312c1f084f95b8cbc167","0afe2f24bc901bdeef284b0bca4ffcb8","3be9ec84612aacb19aa238ee1e19c2e6","33188d572fb9b5bfb2be20cb0bcb1152","173e1df964c7431b2e195aadf31b2405","3fe9be4485fb41032432da95e803e8e8","afbab107c7dd687872c8efabf52b4591","e9932f75806b76b74f0483272ae28ebb","a8d0c8385dd4c2ad2baf2355590b4b3f","c49afb9ecd8c64cd32cf44a2e4e87739","5d80a47e1115c49f1bfafed17a11f4a9","881ea215e5d7074219190aa33621227a","8537db1816e56f9474521a22c4ebb2fe","ba627a5fa7967d57b0330ac43b764c27","9f6cb788f4e95564e7263d9ebbca56c9","2deec526d9fb26ff5dfbc861f45e6179","c1707296ff7954f67c62c707c6b9890f","2de7ce880937ee2117a7ec2e87920385","664ccea9089cd1178345272b82a7e724","f2087afe9f82776dca7799d952e9169a","17a1d45caf6697d0fce35a3aefdda631","b9a8691127611adcda9e2f62e9a6d474","2a03c5677668c36a133b3fd89f1027ab","5f6b83e7daf8f0af3d2a5d189c6d6d0d","663655930b744261881c9c4cf873a686","c0215772e1d65a8f2cd2c3bd17e9bc21","98a688be8446bfd3b8e07f0633e18d7e","97e0779d9d6397865474a022b60f10ed","94f0ada7b8ebd11b57d376ff5cbbf25f","15fd306f20a82f7e3bbc7458acdd525f","5d45dd91f5c85ca9306fa63db8531ac0","8928a32177c3570e80a8e1502d335b50","7e76f18b02d86e1b94f19145c13c7034","5dec9c19f671522b10d9cbb5d445d1e5","45bbb4f5cfe9d9c2f64203bce74778fa","5a147002c360fe512dcbf5c1e387e922","40821ff399fb27e34105eccb7ffb6788","3728f1572543e00949cdd76b620259d9","8b61ceeac84c354a959970b568636451","c4a3e76f42239a9b0c880b0dbb980ee6","0c43d1536555b0a2485adc9a89443542","e9238d66f697e8036d7dff83fa2cc603","905047b4239f5964e0206cbc14ec7165","f7ff694bdc428cceaba7a37fdaa4416b","697f9ce6ef4e8cbd72901db9bb2569de","c07a3b67f5b8e11e4c558eca835c2a9e","8e005874ef0b1e1c2d48d867ef54b932","b9b793d3ba59af98681816ca114dea87","ebb1a0525a1173c2fda7b444e906bdca","18f131a4e708c5e2dd044a22ae150d07","134e442fab778ff263031e402c7645c2","1762e3d8d1cede4a37818f6d00d6d53d","7480431731c227b8ea852f510f931992","4584df54a1d0218324ad85dadbc0d6ce","c2452724464d312778b60caf4876aea3","c9efad263d55f9fdd55996c5c509ebe6","c27f84d92a18ae568d41952efd163d84","c1307a5738cb22b9341c54bdc3d9d053","06041c07249f78f4dc08ab6089ca208c","06fcaf0f63f3ce876f1eaf204ab24f1e","9714b5762000c9d59b5191f20b246725","d8c2c9199f1fd136e3783e12e6379141","b47b577e59d6043c0703f64f69db2060","5c414c2fc89c444e0e8a97a3c1f5cdaf","b483e1b0f2068fa64d9904463ca255a0","484e1a5563626c6880eaff56a5fd04ec","6d74610a8841bf4a2f9753f087dbf364","a01554495941846c5a38e10a386d1896","7d337612c245683a2c0cf3c0c1ca8372","49ddb773d6aa4a9fe1663b512b423cec","82e3bb80e013091b42f7cd2b2e5aaff2","df8c2752306cf43a82f1e9d7934a823f","3d589286708a733b10816e85977aae1f","a00c4f44baad300ebeaea90dbe546293","b3c6a970579839231b4230914a73ec60","96e8e5bf7ec76ef6b6a8b9122ad65f32","76546fe30e202d991ef1b832d4494db9","09a432fb2aa269ad01dac023f75a19a7","6f64ab93e6dacbcf7629ec317bb0bdd2","551543016f5c03824975c88ee17174a4","d5f2731e7a9a97080098d623bdcf30d2","5e0ab8e7e8165bd2d836f20208c4d11e","05b8d8bb8fb431410cc65c3f946a5f3f","ca4548f124883add20c3983042f89e87","03b58ee49384e27245c2eb4a264065eb","5efe5d56b336adbe6cfa22911e937860","cf9decee81effaa1dbcc386c47c7efa9","b737b3b1688ea79c911a0b50453309e4","1ad84b1d6307c51c95aa9a86e9d2fc77","534bf0dc457696bc08a88a8c48c64ce7","651796cbffb079cef5ea0444b431665e","0217eeeada9ef8a98735da04917eb38b","4f62ffb75ed48562990bdf0835520ed3","342c0830bc5b41c118ac987032fca733","3ba579cc01715dbb00195797816162cf","0ed3f23dce47c197adbc5ea0518ceadf","b87fbb2deae692025510caa3cd8fb1c6","1c62a419746fcfac71cd4a924e8bbb0e","f2099e4a14babe84c7567b65b6d5ead3","114087eac0d8870282dd88e4f04fcb01","268d3393e6558b138b77c38233db7bb3","70f5302e9d5ea43431879c00e4627f72","7712b6586ba147b30192849d657b6eee","f365e534646522e3b501de6dededd544","e1264b742f83fbeb01dabe029e709ff3","19d5dce73c9544f76d3bf69b480c7b0e","e2db3091f545aa93b0f152f6dcd27689","c73c4de8bcc58f9f9f4216b616e1e181","5b4654af3b3041732e051783b3e8adb9","8f47985f82e1ee16714b0744ce6919cb","ebe32c6ff517aea8790b2194069cbbdf","d9a2469bce1b43fc585991a04b457de3","4cb5de04f0e25c12efb717950de131b1","b5f18199179dad1a92a858d360c70d97","d357fcfb40efe5e8ef8b2850158aca15","ecf1af07d191f888b873e5e629146ca6","517cae6399ab8525cfaaa597e944aecb","945929b87ca78e608aa1abf665a1a96d","d80698cc0201edab571e2d87eeb0f987","986f79762b6bb15ee87a04d54c7ece50","a59e8871c13f1b631cede0db33707462","0ad4ee684e1bc7f7766b5af4d067e13d","8529bcf992fb141f2254192fa0053e51","a90e4843324e78863f182b2779b0ba6f","859a6077ce26fa10bc9671d5a38e68ee","e1c15d0e10859c6c06b9cb60c7bcc480","61bfd2f7cfa77854815234f9c3a62960","9171bdf785b040ddace81c1264641f60","661ebdcbab08d1155044e5c5f5259531","266a6ea26ce39f138d0892074afce053","c78f88f57d06363cba914c747d9b881c","8a5c52898345912f1593ed65745051a8","de3fdc1240ef39c4f5f3574f1345db71","3c88a0dd11ea18a28c7c14586c2dc777","ec30c438d61d1dc07eabc6eb0a8449c0","a12fc839905eee6a2dda11794fa8f4d8","6686cc0fc588aeccd9c0906dfef17d72","66ac1bf21b11cae6adeadf01c8d07131","f72eee43e05d23a4ea32ce58ee4cc494","a6ae36be98f558cadd08cea7097e2d19","b40b83e0d6ec63c8c4047bb3f929e315","7e7fd1973c8486d24d427344385c8979","57b6d080a25f27f8660b4ef31928ba63","fa0446dca30378d43444d6bf319d04b7","6f177c1df413631e59c8c0f1e74b0bd5","c5ce379e4dcb3f8a8b64291c898d8c1f","20b615d25974e70218d272016f0d3271","bb76f73c038eb5e8c7864b8e67a516e1","41484542663e6e1069f26e159da87277","9fda54aafa61e7709069758723fe7218","d74e66b820482a6b7ab59673f499fd1f","864c091b34eecfcd08ed73e2676a6a4c","4f371aa731653c6c3247fbbc0ad6a3a1","e12507fef2398484b58ad5544723d969","677422956ad7652425bba63513cb90d6","d5b4ce987896a242f8e1a5c5a4103fa2","1e86a6f1a338df908e72eb7a740da8c1","141aeb6f8f729323e02f87afdc47b0b4","e7c016f42b8c0507bcba0e892e1703f0","9a82bbf411acb1de3504a18e49d5003f","d9a2edb8027033451cf56a0d3d3e3918","226fef680c3fe2bcd5e7eef1741af7a9","f226bd7d3e9d090a25681f55f1d061d9","1028fe8fdfaf4b4a5da8967410945fbf","69f09c538bff8cd20de04ad07ee374a6","4895a61b7dfe6f7c4b4b3bed4d72643e","efb7ae0925d3718d050ecd50e2720299","6380eebea6497d0163bf84df5468bee6","c7cab6306e1fba7c756bc4c8a0db7e24","47a196fbd22d8820f5a5e81c07b34491","7147a0f7744ccc58d3ccd6d7677e8dd6","2d463bdf014a168050102fad48355de0","291425a45eea5aaf1b3d200c11d59baf","7d268a5b49d9fde344b80ee9029967ef","cca4481bec716cebd4862f10cc51eded","12ccffc17a90fdc7010758259ef1ce18","0f9dbec43b68e80b49e2c7ddb3e597c2","acf51634cba8581b366320c4d56273c0","ab0b30991342121b2cb952f78ccdd4eb","df7040cc6f9ff96be0ffe38c6854916a","909fce1940c03c609ef78fa6109808ae","0f43cce9447c9b951056d97cb9eb38d8","24c091890f1975a34a5ce186362905fa","2894a33ab43bfc70e69f8f04a1cd3744","cba5bc976f48ad8c9eee4ddf94f110eb","d1d1a3e89d6c9b8668cd82f4441b5705","e8a1e57a38bc4862084f9abb469830e2","60c0bc92f5a7ebf41a352bc151972d28","3cf1f71a5adf23385192947b5ffe11c8","49212428c50088d15a0a96d9f69a7059","78a5e286ee26aeb82d0604f377e62125","76a84266c2243468ff85d9796f965259","f99f8fcdff3265c2a13d0cd7d2f110ef","868f0edd6eed3ebee02654ef983c2c35","1eb17aa8c262e1e5470800e93e622542","61c4042d394bb19a7c8dedf45890e540","5b8ff0f4aa4a3b13b239f1698b3e2d73","cb5ecf63b3fe792b091aa7d6cefb15e2","419aff57e57b391c5176afa09865081d","b89ed37b74b7910a5bc19a0e8343ced7","c77bb0abc48742c2ec0dfa7e30c634df","6ab08bd02a75bc47fbcc25c919ed78d5","90abca7f7775467b41f18b2de9b4818b","e22b1b389cad43ae0f3243c19599b872","c4b369e913f44ec4f2a8ff6c706d74fb","0c4c93e6926933473a57467b60046192","24341f8acac7b7e73470513555db73b4","f0565f02af6fa4886dc881aa08cf6ad8","81ec1fcc15fa94bec7e832dcbe74b249","002649590bad811c6b8366dd29ed61a1","058129c90f48490abe5b38895080f8e8","38a53cfed729e3cdfda477b790db5d56","5be0444899a92a11e1c15795322a3fcd","4dc242d9d3b4a4da2ba7c8ae3e268948","145b320ba6e11a0f38414a4fa707106e","ab61a6fa7951a65e30b0d6eae08d48b2","ed3c8bc08551f68d9363a4553eddfb9f","e6a8fcc658ad40ae2b8d7b76e0de8708","55145c2389a9e05028efdc5d64695db1","663baf9fe9cb039a791332e1ef6fd571","09c58647ed0e01aefcdd591b7d8b0290","1d08102f64c1ab6cfb50c1bd0fc8acc2","bae97749f2cb7e53233d64be7dda31d8","fcb6421298ae97fdcd5f9a8cefb79f36","8c7cfc7e888527c7458568482ad08068","d7dae1b786533ae01e0250fa74434347","67cc9e5ab15a441d093e87913457f315","8e743a74cbf8948d6d51770b45b17153","c7a2107f56d3b965dbd45c298003bdbf","8d51bb3d8008a774ebeb6f480b9e336c","8b42c3eed1df54231a81dd6eff894635","58119d874437ec1b20da4c72cc6d10ea","b067c252f60bb57cfd04c9f1feb790c5","0f3258de77b3d252d9265eecd575c0f6","e51079cac59376262911c75e0c7affa9","46420253b9263023327daa088b0acb47","7cc93ccf7499b97b71c35b8a17515860","8ee711df913f50e547accc7e4d936f29","e85f84977a2ae2c3b8ac2d6e603823ff","6206c1cb72cd5a8e5b217a99dad4ef79","92dee7c74aa8c867734c8b7fc128a123","6a782f16659192399ae6ce0f4869699d","9556d1efe8b1e028ebda609bacb2b2a5","d361f99a6dbca518fd7dffd5d58987ad","d800ad84cc18942e331ff8c03b1fa989","bee1f84dfbe14fde00592f398767a877","3494acf29b3d2181e51a46b8e67ffb9e","ff731bf950ace2f6e88123c4c786b86c","17fa319d027207331f03fac70386f6ae","cdb3e8d75cd172a04ba274e7011aea20","8498916074ca15b0b8bf613d24aabf66","615d7ad970e259e97574cd2333cc9c29","36a2854767c5f2c122b5baaa4860c80c","e0eb9f7d12cf075f1bbf614a2b8e1a88","b049164ee287fc29e0df7c2790fc11f2","db17244115dd1940e1e9adcc0895eb5c"],[-122.6093034,-122.5978065,-122.659741,-122.6546824,-122.557861,-122.6987028,-122.5785721,-122.6905073,-122.6668663,-122.6355462,-122.6738924,-122.6735169,-122.6475437,-122.5469176,-122.6340066,-122.651685,-122.6460457,-122.6818129,-122.6427104,-122.6755413,-122.6360679,-122.6966429,-122.6881027,-122.6432884,-122.6726291,-122.6833123,-122.6233971,-122.6747467,-122.6986304,-122.68626,-122.6375156,-122.5642134,-122.6189983,-122.6790771,-122.6818612,-122.6110657,-122.6686594,-122.6566324,-122.6359928,-122.6454261,-122.6113057,-122.6777159,-122.6820195,-122.6769716,-122.6141596,-122.7006608,-122.6716433,-122.695712,-122.6848841,-122.6789108,-122.6505639,-122.6846749,-122.6347187,-122.6363119,-122.6633379,-122.6819395,-122.6345551,-122.68372,-122.6685226,-122.6564844,-122.6434118,-122.6896772,-122.665776,-122.674166,-122.6008129,-122.6889932,-122.6848358,-122.6844227,-122.6783454,-122.6574612,-122.5943702,-122.6111636,-122.6535398,-122.6892561,-122.5584874,-122.6447314,-122.6210475,-122.6658887,-122.6514316,-122.637238,-122.5933109,-122.6795143,-122.6766282,-122.6497686,-122.6603794,-122.6756573,-122.6508106,-122.6203609,-122.5582468,-122.6304676,-122.6667604,-122.6669146,-122.5686256,-122.6354054,-122.6774061,-122.6946044,-122.62528,-122.6372065,-122.6535114,-122.6812685,-122.6598278,-122.6480594,-122.7044079,-122.6409548,-122.682281,-122.6755071,-122.6662856,-122.6350486,-122.6407517,-122.6533493,-122.6732969,-122.6920402,-122.6753193,-122.6965141,-122.6852508,-122.6941484,-122.6703492,-122.6812121,-122.6603526,-122.6811048,-122.653631,-122.6810794,-122.6614845,-122.6395279,-122.6037107,-122.6870298,-122.6020709,-122.6895659,-122.6294804,-122.6840124,-122.6618063,-122.6852615,-122.56249,-122.6567262,-122.6118851,-122.6824003,-122.6276927,-122.6199692,-122.6558371,-122.6725459,-122.6770306,-122.6566163,-122.5837839,-122.6308254,-122.646602,-122.61884,-122.55386,-122.6949424,-122.6506644,-122.6945615,-122.6719048,-122.6815957,-122.6619177,-122.620613,-122.6554307,-122.6747386,-122.6744197,-122.6362449,-122.5889343,-122.6076627,-122.6600522,-122.57900777,-122.667667,-122.5890544,-122.6763654,-122.6108846,-122.6305372,-122.6307517,-122.6932457,-122.6369745,-122.6775563,-122.6724963,-122.5539214,-122.6714408,-122.6296306,-122.6160378,-122.6533681,-122.6121104,-122.6416328,-122.6966717,-122.6636343,-122.6555675,-122.6820369,-122.6632373,-122.6824299,-122.6621038,-122.6136768,-122.678701,-122.675600833333,-122.635079833333,-122.6767275,-122.591889833333,-122.673205166667,-122.704832166667,-122.627620166667,-122.683776666667,-122.6975015,-122.602453166667,-122.684304333333,-122.620163333333,-122.6309955,-122.6526865,-122.647413666667,-122.637838,-122.655423333333,-122.558906666667,-122.649652333333,-122.676835333333,-122.578819333333,-122.696474666667,-122.618000166667,-122.647360833333,-122.653484,-122.654598666667,-122.681178833333,-122.621379333333,-122.674302,-122.579922,-122.620136,-122.684164166667,-122.684558833333,-122.681958333333,-122.685591166667,-122.655652333333,-122.663616666667,-122.569239666667,-122.688288666667,-122.623187,-122.673011666667,-122.692683166667,-122.687559666667,-122.641893833333,-122.673972333333,-122.680719333333,-122.660827333333,-122.659335666667,-122.648646,-122.673398333333,-122.6750055,-122.675486333333,-122.681397833333,-122.6615195,-122.652418333333,-122.685562333333,-122.678693833333,-122.656807166667,-122.677427166667,-122.6375795,-122.6679545,-122.675217333333,-122.673067833333,-122.620495666667,-122.681061166667,-122.663718333333,-122.660987,-122.6466195,-122.626740166667,-122.685226333333,-122.635782,-122.671985833333,-122.652355333333,-122.634865666667,-122.609958833333,-122.650930833333,-122.596055333333,-122.673985166667,-122.629426166667,-122.59984,-122.6766275,-122.6202845,-122.645032833333,-122.699459,-122.600651166667,-122.6751205,-122.637174333333,-122.638199666667,-122.682286,-122.681002666667,-122.6277205,-122.596557166667,-122.684136166667,-122.681231166667,-122.676439,-122.632748833333,-122.637406166667,-122.634537833333,-122.680245,-122.680629166667,-122.696584166667,-122.680545833333,-122.622848,-122.6874505,-122.608864166667,-122.677688,-122.6212675,-122.660320333333,-122.6205025,-122.645065,-122.6388455,-122.6993145,-122.658106,-122.691131333333,-122.6022645,-122.667794833333,-122.666833833333,-122.6366905,-122.636615,-122.667956,-122.587132666667,-122.69829,-122.6876615,-122.646713166667,-122.684448666667,-122.696113833333,-122.683237,-122.596045833333,-122.678345333333,-122.699512,-122.625947166667,-122.695388166667,-122.661747333333,-122.6581195,-122.6400475,-122.6382885,-122.6796265,-122.630356166667,-122.643858833333,-122.613116166667,-122.567332,-122.6110585,-122.698014666667,-122.6953415,-122.680300333333,-122.6975025,-122.690577833333,-122.6917745,-122.672762,-122.647068166667,-122.636858,-122.637965,-122.666759166667,-122.629684333333,-122.681166833333,-122.5755355,-122.633793333333,-122.624378666667,-122.657928333333,-122.684412833333,-122.633738833333,-122.6483985,-122.683077833333,-122.648807666667,-122.6777205,-122.663862333333,-122.661627,-122.638169333333,-122.660620333333,-122.677702,-122.599392166667,-122.661515166667,-122.698642833333,-122.690281666667,-122.661919666667,-122.6784785,-122.676924,-122.562212666667,-122.562946833333,-122.662372166667,-122.638218833333,-122.633664833333,-122.675287166667,-122.562317833333,-122.5785525,-122.653453833333,-122.545254,-122.698582,-122.663729,-122.609240166667,-122.662318833333,-122.681226833333,-122.666563166667,-122.643285666667,-122.642041833333,-122.683445833333,-122.5608475,-122.652904,-122.603723,-122.678662333333,-122.694501333333,-122.578578666667,-122.666749666667,-122.629862333333,-122.679984666667,-122.675269,-122.683853833333,-122.628636666667,-122.660953333333,-122.641299333333,-122.686261166667,-122.704534666667,-122.697881666667,-122.635702666667,-122.647506,-122.653166833333,-122.678129833333,-122.59987,-122.684628,-122.611046833333,-122.660551333333,-122.695732,-122.6230785,-122.645063333333,-122.650683333333,-122.6818915,-122.698880333333,-122.663767666667,-122.677379,-122.676491833333,-122.6518375,-122.670833666667,-122.608931166667,-122.637693666667,-122.660976833333,-122.659065166667,-122.679770666667,-122.635018833333,-122.6526845,-122.635004666667,-122.698642833333,-122.647378666667,-122.635474,-122.6019275,-122.575489666667,-122.6822205,-122.684875333333,-122.661521,-122.689617,-122.675680333333,-122.706675166667,-122.666755166667,-122.675830666667,-122.650836833333,-122.648874666667,-122.6337735,-122.660029333333,-122.630024166667,-122.695308,-122.634992,-122.660762,-122.602131666667,-122.608469833333,-122.560645666667,-122.683033833333,-122.677890833333,-122.6505565,-122.678515833333,-122.588668666667,-122.675280666667,-122.687382833333,-122.648745666667,-122.6414395,-122.661369166667,-122.696706166667,-122.560101666667,-122.6770385,-122.567091833333,-122.661688333333,-122.692464666667,-122.687125833333,-122.660304666667,-122.675211666667,-122.6777845,-122.637280333333,-122.6201175,-122.675607166667,-122.661315166667,-122.677705666667,-122.630135833333,-122.684050166667,-122.6470705,-122.621312666667],[45.52646211,45.5081532,45.53146071,45.5301398,45.5225034,45.52914205,45.4902606,45.52862062,45.55076344,45.55902314,45.51556831,45.50910258,45.55907103,45.5190408,45.5590435,45.51844688,45.51636144,45.52374151,45.55905507,45.55458563,45.51623176,45.52976024,45.53715171,45.53893649,45.52142066,45.51592353,45.49333654,45.56282546,45.53211645,45.53290424,45.49787392,45.5140185,45.51645917,45.51609691,45.55522233,45.50350608,45.53479718,45.51633325,45.51936283,45.51222277,45.51189243,45.50971347,45.5286366,45.54107815,45.51195046,45.53550403,45.49913657,45.5699526,45.53434532,45.5123205,45.53508224,45.51544427,45.52642975,45.51202353,45.50624163,45.576983,45.50468892,45.51184309,45.55941042,45.5717805,45.52297292,45.52196048,45.51515295,45.52871176,45.5559258,45.5627419,45.56244707,45.53080401,45.5152252,45.53140997,45.56250716,45.54827571,45.50280906,45.52556242,45.5190613,45.5033655,45.51186486,45.53086696,45.55916922,45.5205931,45.5464321,45.51946243,45.5282777,45.52440674,45.55645437,45.54998583,45.54828551,45.55836114,45.5335216,45.5536928,45.5475928,45.55335313,45.4797127,45.49723033,45.51889487,45.56267617,45.50473239,45.52373453,45.5591179,45.51898132,45.5627673,45.56274555,45.52181825,45.5482433,45.51158277,45.51803412,45.51147657,45.56271655,45.55908767,45.5120818,45.52247868,45.51788377,45.50225355,45.52487653,45.5251286,45.52634601,45.52269573,45.50936198,45.52771962,45.52500056,45.53496857,45.52175423,45.54179953,45.50356665,45.5422831,45.51507401,45.553917,45.53142501,45.511907,45.52279251,45.52968884,45.5256166,45.5311,45.51299715,45.53966541,45.55891838,45.49684155,45.53689808,45.51434624,45.52536699,45.56251948,45.52279251,45.5502248,45.5420646,45.5590714,45.53677138,45.53344,45.53409115,45.55568352,45.52826831,45.49429475,45.53083126,45.52358836,45.53577751,45.55913676,45.52378902,45.569917,45.52643433,45.4863971,45.4950271,45.5178988,45.50509011,45.5446211,45.5554316,45.5211726,45.50528482,45.56453067,45.51649676,45.5239729,45.49334301,45.52507854,45.51782551,45.5160452,45.5027677,45.5048393,45.51658489,45.50512504,45.50523618,45.52649493,45.54125782,45.53561394,45.53400578,45.56197102,45.52996934,45.53232501,45.5604984,45.54830706,45.5232333333333,45.524418,45.5644291666667,45.5181085,45.5263715,45.520358,45.5363985,45.5651273333333,45.4961868333333,45.5772648333333,45.5249906666667,45.5266218333333,45.5123928333333,45.5169668333333,45.5717906666667,45.5117778333333,45.5601578333333,45.5163846666667,45.526369,45.5342965,45.5310133333333,45.5063976666667,45.530515,45.5119818333333,45.5519905,45.533607,45.546783,45.5230865,45.5345293333333,45.505033,45.505693,45.5332735,45.5676605,45.5333591666667,45.571866,45.528649,45.5157201666667,45.55448,45.5100788333333,45.5771731666667,45.5352013333333,45.5605613333333,45.5307233333333,45.5305751666667,45.556216,45.518471,45.5175686666667,45.5248316666667,45.517233,45.5122895,45.5162733333333,45.5196126666667,45.5627298333333,45.5259895,45.5388925,45.5592005,45.5101956666667,45.5208233333333,45.5300418333333,45.5234396666667,45.5119885,45.5547941666667,45.5198656666667,45.5175963333333,45.5621018333333,45.5295303333333,45.518745,45.5668546666667,45.5342518333333,45.5638791666667,45.5200853333333,45.5335135,45.5023353333333,45.535111,45.4852815,45.5570005,45.5121261666667,45.489248,45.5225706666667,45.5551658333333,45.4906101666667,45.5272083333333,45.5118801666667,45.5348008333333,45.5354626666667,45.5052721666667,45.5192101666667,45.5221496666667,45.5732291666667,45.5094693333333,45.5256846666667,45.5638373333333,45.489452,45.5241558333333,45.5256703333333,45.5503301666667,45.5298545,45.5262356666667,45.523152,45.5176383333333,45.5298486666667,45.5341455,45.5080186666667,45.4903733333333,45.5734638333333,45.533591,45.520383,45.535144,45.5342906666667,45.5603256666667,45.5078271666667,45.5283405,45.5347258333333,45.571714,45.5306005,45.5234441666667,45.5402876666667,45.5361431666667,45.534378,45.559086,45.5774085,45.5337713333333,45.5236368333333,45.530523,45.5716695,45.5255915,45.5348443333333,45.524239,45.5337473333333,45.522098,45.535533,45.4910376666667,45.5768561666667,45.517761,45.5717425,45.5602558333333,45.5288985,45.5273131666667,45.5120806666667,45.504888,45.501625,45.4898755,45.5044713333333,45.5211878333333,45.5664295,45.5080056666667,45.577264,45.5301661666667,45.522589,45.5655675,45.571817,45.5291256666667,45.558968,45.5361185,45.5171643333333,45.5258398333333,45.4912038333333,45.5163635,45.5129138333333,45.503242,45.5221771666667,45.4920001666667,45.5698786666667,45.5243295,45.5587736666667,45.5238255,45.5323158333333,45.5241975,45.5221688333333,45.5340161666667,45.5236356666667,45.5376718333333,45.5210903333333,45.5346911666667,45.5334191666667,45.5532715,45.5255678333333,45.5597785,45.5044545,45.5225086666667,45.5216533333333,45.5589546666667,45.4997438333333,45.5222855,45.5044791666667,45.5161371666667,45.5143448333333,45.5223705,45.5346593333333,45.5188978333333,45.565132,45.5342376666667,45.5258683333333,45.537459,45.5279596666667,45.5529985,45.5301281666667,45.5138708333333,45.5349318333333,45.5193153333333,45.5176338333333,45.5292018333333,45.5059576666667,45.5361625,45.4961891666667,45.5228976666667,45.5195458333333,45.5191191666667,45.5279141666667,45.5186773333333,45.5314888333333,45.5360618333333,45.5310398333333,45.5211241666667,45.5327873333333,45.5519261666667,45.5544405,45.5213183333333,45.4905725,45.5173998333333,45.5046801666667,45.526755,45.524837,45.5179615,45.5071095,45.5591111666667,45.5727028333333,45.5296855,45.5627748333333,45.5235276666667,45.5274216666667,45.5142585,45.5209273333333,45.4970753333333,45.498773,45.5669183333333,45.5627645,45.518792,45.5337353333333,45.5340563333333,45.5337038333333,45.5347596666667,45.5519933333333,45.533423,45.5152958333333,45.4916848333333,45.5178343333333,45.528591,45.5337118333333,45.5386591666667,45.5276533333333,45.5706533333333,45.536129,45.517402,45.5142685,45.4754591666667,45.5048418333333,45.522153,45.5615825,45.5664026666667,45.533736,45.5325428333333,45.5167613333333,45.5229846666667,45.5139326666667,45.5242315,45.5198225,45.516528,45.5033763333333,45.5303935,45.5298195,45.558358,45.4741001666667,45.5203536666667,45.5429756666667,45.5342146666667,45.5151295,45.5279208333333,45.4808333333333,45.5448946666667,45.5303465,45.5770065,45.5299085,45.519772,45.5265563333333,45.524431,45.5691388333333,45.52769,45.5343633333333,45.5255263333333,45.5615446666667,45.5051621666667,45.5718423333333,45.5166285],[7,2,2,7,6,6,2,2,3,7,9,3,1,2,1,3,3,5,0,2,7,0,2,1,0,3,2,4,6,1,3,4,1,3,5,2,2,4,4,9,4,1,8,0,1,12,6,1,2,4,8,5,1,5,7,2,5,2,1,4,8,3,8,6,6,5,1,5,0,9,3,3,2,6,3,5,1,2,0,0,7,7,5,8,1,11,1,2,7,5,8,5,10,0,9,1,0,3,1,9,0,8,2,0,6,5,5,2,6,3,9,13,0,3,2,10,6,6,0,2,4,6,1,0,1,3,1,7,9,8,0,2,1,3,4,5,7,1,4,6,0,0,2,1,0,0,6,7,6,5,9,6,1,1,3,4,1,6,4,3,5,2,3,2,7,0,0,11,4,1,0,6,3,3,2,1,8,0,4,2,2,0,0,2,13,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,4,6,5,3,10,3,12,9,11,9,23,8,3,8,10,8,13,9,9,7,10,13,10,18,15,2,11,8,17,2,1,9,14,13,2,10,14,13,4,5,16,6,12,3,6,7,4,3,8,3,5,11,13,11,2,13,21,14,3,2,15,2,10,2,13,17,11,6,0,5,3,8,11,3,13,16,15,12,24,2,11,6,10,17,7,9,6,4,1,8,6,0,5,11,11,5,15,8,11,4,4,6,5,10,13,11,15,3,13,9,2,6,15,8,2,12,6,8,14,14,10,16,6,2,7,5,5,3,9,8,3,5,3,4,14,2,5,0,7,8,11,3,3,9,4,4,5,6,7,5,10,5,9,15,3,4,9,7,8,13,4,5,1,10,6,1,0,13,4,17,12,2,16,13,3,10,5,8,2,9,8,8,6,3,6,11,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","docked","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free","free"]],"container":"<table class=\"display fill-container\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>id<\/th>\n      <th>lon<\/th>\n      <th>lat<\/th>\n      <th>num_bikes_available<\/th>\n      <th>num_docks_available<\/th>\n      <th>type<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+</div>
+
+<script>
+
+$(document).ready(function () {
+
+  // add bootstrap table styles to pandoc tables
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+
+  // initialize mathjax
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+  document.getElementsByTagName("head")[0].appendChild(script);
+
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  FlexDashboard.init({
+    theme: "cosmo",
+    fillPage: true,
+    orientation: "columns",
+    storyboard: false,
+    defaultFigWidth: 576,
+    defaultFigHeight: 460,
+    defaultFigWidthMobile: 360,
+    defaultFigHeightMobile: 460,
+    resize_reload: true
+  });
+});
+</script>
+
+</body>
+</html>
