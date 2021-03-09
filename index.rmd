@@ -56,7 +56,7 @@ Row
 valueBox(value = sum(pdx_stations$num_docks_available), 
          caption = "Total number of docks available nearby", 
          #icon = "fas fa-user-md", 
-         color = "red")
+         color = "green")
 ```
 
 ### Number_Bike {.value-box}
