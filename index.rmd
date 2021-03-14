@@ -14,6 +14,8 @@ library(flexdashboard)
 library(gbfs)
 library(tidyverse)
 library(leaflet)
+library(crosstalk)  # inter-widget interactivity
+library(DT)  # interactive tables
 
 # -------------- Data ------------------
 pdx_station_info <- 
@@ -46,6 +48,43 @@ pdx_full <- bind_rows(pdx_stations, pdx_free_bikes)
 ```
 
 
+
+Sidebar {.sidebar data-width=300} 
+-----------------------------------------------------------------------
+
+### Filters
+
+```{r}
+
+showcase_df <- data.frame(c("A", "B", "A", "B", "A", "B"), c(1,5,3,2,4,1))
+colnames(showcase_df) <- c("category", "costs")
+shared_data <- SharedData$new(pdx_full)
+
+filter_select("showcase_filter", "A or B?", shared_data, showcase_df$category)
+
+valueBox(sum(pdx_full$num_bikes_available))
+
+bscols(
+  filter_checkbox(
+    id = "bike_type",
+    label = "Bikes type",
+    sharedData = shared_data,
+    group = ~pdx_full$type
+  ),
+  filter_slider(
+    id = "docks_available",
+    label = "Available docs",
+    sharedData = shared_data,
+    column = ~pdx_full$num_docks_available,
+    step = 10,
+    round = TRUE,
+    sep = "",
+    ticks = FALSE
+  )
+)
+
+```
+
 Row
 -----------------------------------------------------------------------
 
@@ -70,28 +109,60 @@ valueBox(value = sum(pdx_stations$num_bikes_available),
 ```
 
 
-
-
-
-Row {.tabset}
+Row
 -----------------------------------------------------------------------
 
-### Map
 
+### Interactive map
 
 ```{r}
 leaflet(pdx_full) %>% 
   addTiles() %>% 
   addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_bikes_available, color="blue", weight=2) %>% 
-  addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_docks_available, color="red", weight=2)
+  addCircleMarkers(lng=~lon,lat=~lat, radius = ~num_docks_available, color="red", weight=2) %>% 
+  addAwesomeMarkers(
+    icon = awesomeIcons(
+      library = "ion",
+      icon = ifelse(
+        test = pdx_full$type == "free",
+        yes = "ion-android-star-outline",
+        no = "ion-android-radio-button-off"
+      ),
+      iconColor = "white",
+      markerColor = ifelse(
+        test = pdx_full$type == "Type", 
+        yes = "orange",
+        no = "green"
+      )
+    )
+  )
 ```
 
-### Data table
 
-```{r}
-library(DT)
 
-datatable(pdx_full)
+Row
+-----------------------------------------------------------------------
+
+
+### Datatable
+    
+```{r datatable}
+
+pdx_full %>% 
+  DT::datatable(   
+    filter = "top",  # allows filtering on each column
+    rownames = FALSE,  # remove rownames
+    style = "bootstrap",
+    class = "compact",
+    width = "100%",
+    colnames = c(
+     "ID" = "id",
+     "Lon" = "lon",
+     "Lat" = "lat",
+     "Num_Bikes" = "num_bikes_available",
+     "Num_Docks" = "num_docks_available",
+     "Type" = "type"
+   )
+  )
+  
 ```
-
-
